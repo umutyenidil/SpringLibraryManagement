@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.handler;
 
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
+import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -12,8 +13,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -61,5 +64,23 @@ public class GlobalExceptionHandler {
                                 .message(messageSource.getMessage("error.language.duplicate", null, LocaleContextHolder.getLocale()))
                                 .build()
                 );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.common.parameter.invalid", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(LanguageNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTypeMismatch(LanguageNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.language.notfound", null, LocaleContextHolder.getLocale()))
+                        .build());
     }
 }

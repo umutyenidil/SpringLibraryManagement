@@ -10,4 +10,11 @@ public class LanguageMapper {
                 .name(request.name())
                 .build();
     }
+
+    public LanguageResponse toLanguageResponse(Language language) {
+        return LanguageResponse.builder()
+                .id(language.getId())
+                .name(language.getName())
+                .build();
+    }
 }

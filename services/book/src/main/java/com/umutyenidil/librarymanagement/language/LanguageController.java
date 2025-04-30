@@ -16,18 +16,24 @@ public class LanguageController {
     private final LanguageService languageService;
 
     @PostMapping
-    public ResponseEntity<UUID> createLanguage(
+    public ResponseEntity<UUID> saveLanguage(
             @RequestBody @Valid LanguageRequest request
     ) {
-        return ResponseEntity.ok(languageService.createLanguage(request));
+        return ResponseEntity.ok(languageService.saveLanguage(request));
     }
 
     @GetMapping
-    public ResponseEntity<Page<Language>> paginateLanguages(
+    public ResponseEntity<Page<Language>> findAllLanguages(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        return ResponseEntity.ok(languageService.paginateLanguages(PageRequest.of(page - 1, size)));
+        return ResponseEntity.ok(languageService.findAllLanguages(PageRequest.of(page - 1, size)));
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<LanguageResponse> findLanguageById(
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(languageService.findLanguageById(id));
+    }
 }

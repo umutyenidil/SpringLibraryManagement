@@ -14,7 +14,7 @@ public class LanguageService {
     private final LanguageRepository languageRepository;
     private final LanguageMapper languageMapper;
 
-    public UUID createLanguage(LanguageRequest request) {
+    public UUID saveLanguage(LanguageRequest request) {
         if (languageRepository.existsByNameIgnoreCase(request.name())) throw new LanguageDuplicatonException();
 
         var language = languageMapper.toLanguage(request);
@@ -24,7 +24,15 @@ public class LanguageService {
         return savedLanguage.getId();
     }
 
-    public Page<Language> paginateLanguages(Pageable pageable) {
+    public Page<Language> findAllLanguages(Pageable pageable) {
         return languageRepository.findAll(pageable);
+    }
+
+    public LanguageResponse findLanguageById(
+            UUID id
+    ) {
+        return languageRepository.findById(id)
+                .map(languageMapper::toLanguageResponse)
+                .orElseThrow(LanguageNotFoundException::new);
     }
 }
