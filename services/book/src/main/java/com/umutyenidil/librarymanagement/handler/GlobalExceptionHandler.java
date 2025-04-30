@@ -1,7 +1,9 @@
 package com.umutyenidil.librarymanagement.handler;
 
 import com.umutyenidil.librarymanagement.author.AuthorNotFoundException;
+import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.category.CategoryDuplicationException;
+import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -101,6 +103,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
                         .message(messageSource.getMessage("error.category.duplicate", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryDuplicationException(CategoryNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.category.notfound", null, LocaleContextHolder.getLocale()))
                         .build());
     }
 }

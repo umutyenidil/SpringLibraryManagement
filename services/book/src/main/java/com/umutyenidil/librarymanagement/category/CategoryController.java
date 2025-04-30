@@ -3,10 +3,7 @@ package com.umutyenidil.librarymanagement.category;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -22,5 +19,12 @@ public class CategoryController {
             @RequestBody @Valid CategoryRequest request
     ) {
         return ResponseEntity.ok(categoryService.saveCategory(request));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponse> findCategoryById(
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(categoryService.findCategoryById(id));
     }
 }

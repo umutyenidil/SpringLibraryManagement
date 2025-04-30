@@ -10,4 +10,11 @@ public class CategoryMapper {
                 .name(request.name())
                 .build();
     }
+
+    public CategoryResponse toCategoryResponse(Category category) {
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
+    }
 }

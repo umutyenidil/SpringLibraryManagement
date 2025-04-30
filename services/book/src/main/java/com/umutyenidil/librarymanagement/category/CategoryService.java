@@ -21,4 +21,10 @@ public class CategoryService {
 
         return savedCategory.getId();
     }
+
+    public CategoryResponse findCategoryById(UUID id) {
+        return categoryRepository.findById(id)
+                .map(categoryMapper::toCategoryResponse)
+                .orElseThrow(CategoryNotFoundException::new);
+    }
 }
