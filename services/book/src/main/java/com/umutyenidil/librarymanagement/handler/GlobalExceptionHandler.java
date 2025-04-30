@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.handler;
 
 import com.umutyenidil.librarymanagement.author.AuthorNotFoundException;
+import com.umutyenidil.librarymanagement.category.CategoryDuplicationException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,7 +27,7 @@ public class GlobalExceptionHandler {
     private final MessageSource messageSource;
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ResponseEntity
                 .badRequest()
                 .body(
@@ -37,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         var errors = new HashMap<String, String>();
 
         exception.getBindingResult().getAllErrors()
@@ -57,7 +58,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(LanguageDuplicatonException.class)
-    public ResponseEntity<ErrorResponse> handleLanguageDuplicationException(LanguageDuplicatonException ex) {
+    public ResponseEntity<ErrorResponse> handleLanguageDuplicatonException(LanguageDuplicatonException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(
@@ -68,7 +69,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.builder()
@@ -77,7 +78,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(LanguageNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleTypeMismatch(LanguageNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleLanguageNotFoundException(LanguageNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
@@ -86,11 +87,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthorNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleTypeMismatch(AuthorNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleAuthorNotFoundException(AuthorNotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
                         .message(messageSource.getMessage("error.author.notfound", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(CategoryDuplicationException.class)
+    public ResponseEntity<ErrorResponse> handleCategoryDuplicationException(CategoryDuplicationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.category.duplicate", null, LocaleContextHolder.getLocale()))
                         .build());
     }
 }
