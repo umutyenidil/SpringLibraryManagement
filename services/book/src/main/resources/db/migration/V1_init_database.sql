@@ -1,15 +1,15 @@
-CREATE TABLE language
+CREATE TABLE languages
 (
     id   UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE publisher
+CREATE TABLE publishers
 (
-    id                 UUID PRIMARY KEY,
-    name               VARCHAR(255) NOT NULL,
-    created_date       TIMESTAMP,
-    last_modified_date TIMESTAMP
+    id         UUID PRIMARY KEY,
+    name       VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
 );
 
 CREATE TABLE genre

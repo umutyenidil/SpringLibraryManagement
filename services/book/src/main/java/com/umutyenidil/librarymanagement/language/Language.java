@@ -1,11 +1,9 @@
 package com.umutyenidil.librarymanagement.language;
 
+import com.umutyenidil.librarymanagement._core.entity.BaseEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,11 +11,8 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-public class Language {
-
-    @Id
-    @GeneratedValue
-    private UUID id;
+@Table(name = "languages")
+public class Language extends BaseEntity {
 
     private String name;
 }
