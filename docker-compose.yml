@@ -1,0 +1,16 @@
+services:
+  postgres:
+    container_name: lm_postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: umut
+      POSTGRES_PASSWORD: umut
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - lm_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  lm_postgres_data:
