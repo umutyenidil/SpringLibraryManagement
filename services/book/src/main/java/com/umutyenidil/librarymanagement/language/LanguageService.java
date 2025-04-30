@@ -37,4 +37,8 @@ public class LanguageService {
                 .map(languageMapper::toLanguageResponse)
                 .orElseThrow(LanguageNotFoundException::new);
     }
+
+    public void deleteLanguageById(UUID id) {
+        languageRepository.deleteById(id);
+    }
 }

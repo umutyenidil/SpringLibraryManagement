@@ -36,4 +36,14 @@ public class LanguageController {
     ) {
         return ResponseEntity.ok(languageService.findLanguageById(id));
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteLanguageById(
+            @PathVariable UUID id
+    ) {
+        languageService.deleteLanguageById(id);
+
+        return ResponseEntity.noContent()
+                .build();
+    }
 }
