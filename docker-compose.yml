@@ -8,6 +8,7 @@ services:
       PGDATA: /var/lib/postgresql/data
     volumes:
       - lm_postgres_data:/var/lib/postgresql/data
+      - ./docker:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
     restart: unless-stopped
