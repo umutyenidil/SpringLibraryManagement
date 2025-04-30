@@ -1,4 +1,4 @@
-package com.umutyenidil.librarymanagement;
+package com.umutyenidil.librarymanagement.category;
 
 import com.umutyenidil.librarymanagement._core.entity.SoftDeletableEntity;
 import com.umutyenidil.librarymanagement.book.Book;

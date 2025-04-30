@@ -1,8 +1,8 @@
 package com.umutyenidil.librarymanagement.book;
 
-import com.umutyenidil.librarymanagement.Category;
 import com.umutyenidil.librarymanagement._core.entity.SoftDeletableEntity;
 import com.umutyenidil.librarymanagement.author.Author;
+import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.genre.Genre;
 import com.umutyenidil.librarymanagement.language.Language;
 import com.umutyenidil.librarymanagement.publisher.Publisher;
@@ -47,7 +47,7 @@ public class Book extends SoftDeletableEntity {
 
     private LocalDate publishDate;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
     @JoinTable(
             name = "book_genres",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -55,7 +55,7 @@ public class Book extends SoftDeletableEntity {
     )
     private List<Genre> genres;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
     @JoinTable(
             name = "book_categories",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -63,7 +63,7 @@ public class Book extends SoftDeletableEntity {
     )
     private List<Category> categories;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
     @JoinTable(
             name = "book_authors",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -71,7 +71,7 @@ public class Book extends SoftDeletableEntity {
     )
     private List<Author> authors;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
     @JoinTable(
             name = "book_translators",
             joinColumns = @JoinColumn(name = "book_id"),
