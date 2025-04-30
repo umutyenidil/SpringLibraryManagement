@@ -5,10 +5,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorMapper {
 
-    Author toAuthor(AuthorRequest request) {
+    public Author toAuthor(AuthorRequest request) {
         return Author.builder()
                 .name(request.name())
                 .surname(request.surname())
+                .build();
+    }
+
+    public AuthorResponse toAuthorResponse(Author author) {
+        return AuthorResponse.builder()
+                .id(author.getId())
+                .name(author.getName())
+                .surname(author.getSurname())
                 .build();
     }
 }

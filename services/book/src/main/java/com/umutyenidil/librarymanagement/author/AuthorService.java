@@ -18,4 +18,11 @@ public class AuthorService {
 
         return savedAuthor.getId();
     }
+
+    public AuthorResponse findAuthorById(UUID id) {
+        return authorRepository.findById(id)
+                .map(authorMapper::toAuthorResponse)
+                .orElseThrow(AuthorNotFoundException::new);
+    }
+
 }

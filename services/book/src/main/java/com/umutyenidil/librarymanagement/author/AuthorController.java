@@ -3,10 +3,7 @@ package com.umutyenidil.librarymanagement.author;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -24,4 +21,10 @@ public class AuthorController {
         return ResponseEntity.ok(authorService.saveAuthor(request));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AuthorResponse> getAuthor(
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(authorService.findAuthorById(id));
+    }
 }
