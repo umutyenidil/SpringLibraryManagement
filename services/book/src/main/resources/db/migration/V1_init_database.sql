@@ -30,7 +30,7 @@ CREATE TABLE category
     deleted_at TIMESTAMP
 );
 
-CREATE TABLE author
+CREATE TABLE authors
 (
     id         UUID PRIMARY KEY,
     name       VARCHAR(255),

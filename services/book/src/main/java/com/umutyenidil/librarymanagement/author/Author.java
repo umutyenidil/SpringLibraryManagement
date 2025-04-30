@@ -4,6 +4,7 @@ import com.umutyenidil.librarymanagement._core.entity.SoftDeletableEntity;
 import com.umutyenidil.librarymanagement.book.Book;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.util.List;
@@ -14,12 +15,10 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
+@Table(name = "authors")
 public class Author extends SoftDeletableEntity {
     private String name;
     private String surname;
-
-    // todo: nationality eklenebilir
-    // private Nationality nationality;
 
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;
