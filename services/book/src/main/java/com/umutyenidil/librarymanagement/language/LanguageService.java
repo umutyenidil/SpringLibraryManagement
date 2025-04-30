@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +25,9 @@ public class LanguageService {
         return savedLanguage.getId();
     }
 
-    public Page<Language> findAllLanguages(Pageable pageable) {
-        return languageRepository.findAll(pageable);
+    public Page<LanguageResponse> findAllLanguages(Pageable pageable) {
+        return languageRepository.findAll(pageable)
+                .map(languageMapper::toLanguageResponse);
     }
 
     public LanguageResponse findLanguageById(

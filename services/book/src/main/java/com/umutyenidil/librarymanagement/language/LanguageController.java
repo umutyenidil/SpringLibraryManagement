@@ -23,7 +23,7 @@ public class LanguageController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Language>> findAllLanguages(
+    public ResponseEntity<Page<LanguageResponse>> findAllLanguages(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
