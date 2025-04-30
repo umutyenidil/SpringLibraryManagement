@@ -1,6 +1,9 @@
 package com.umutyenidil.librarymanagement.author;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -25,4 +28,8 @@ public class AuthorService {
                 .orElseThrow(AuthorNotFoundException::new);
     }
 
+    public Page<AuthorResponse> findAllAuthors(Pageable pageable) {
+        return authorRepository.findAll(pageable)
+                .map(authorMapper::toAuthorResponse);
+    }
 }
