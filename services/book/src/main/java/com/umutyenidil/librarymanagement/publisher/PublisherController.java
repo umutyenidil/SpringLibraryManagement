@@ -37,4 +37,13 @@ public class PublisherController {
     ) {
         return ResponseEntity.ok(publisherService.findAllPublishers(PageRequest.of(page - 1, size)));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePublisherById(
+            @PathVariable UUID id
+    ) {
+        publisherService.deletePublisherById(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -33,5 +34,13 @@ public class PublisherService {
     public Page<PublisherResponse> findAllPublishers(Pageable pageable) {
         return publisherRepository.findAllByDeletedAtIsNull(pageable)
                 .map(publisherMapper::toPublisherResponse);
+    }
+
+    public void deletePublisherById(UUID id) {
+        publisherRepository.findByIdAndDeletedAtIsNull(id)
+                .ifPresent(publisher -> {
+                    publisher.setDeletedAt(LocalDateTime.now());
+                    publisherRepository.save(publisher);
+                });
     }
 }
