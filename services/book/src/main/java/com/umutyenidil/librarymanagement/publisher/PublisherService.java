@@ -1,6 +1,8 @@
 package com.umutyenidil.librarymanagement.publisher;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -26,5 +28,10 @@ public class PublisherService {
         return publisherRepository.findByIdAndDeletedAtIsNull(id)
                 .map(publisherMapper::toPublisherResponse)
                 .orElseThrow(PublisherNotFoundException::new);
+    }
+
+    public Page<PublisherResponse> findAllPublishers(Pageable pageable) {
+        return publisherRepository.findAllByDeletedAtIsNull(pageable)
+                .map(publisherMapper::toPublisherResponse);
     }
 }
