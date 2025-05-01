@@ -21,4 +21,10 @@ public class PublisherService {
 
         return publisher.getId();
     }
+
+    public PublisherResponse findPublisherId(UUID id) {
+        return publisherRepository.findByIdAndDeletedAtIsNull(id)
+                .map(publisherMapper::toPublisherResponse)
+                .orElseThrow(PublisherNotFoundException::new);
+    }
 }

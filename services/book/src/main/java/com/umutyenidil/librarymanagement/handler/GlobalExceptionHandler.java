@@ -10,6 +10,7 @@ import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import com.umutyenidil.librarymanagement.publisher.Publisher;
 import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
+import com.umutyenidil.librarymanagement.publisher.PublisherNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -144,6 +145,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.builder()
                         .message(messageSource.getMessage("error.publisher.duplicate", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(PublisherNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePublisherNotFoundException(PublisherNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.publisher.notfound", null, LocaleContextHolder.getLocale()))
                         .build());
     }
 }
