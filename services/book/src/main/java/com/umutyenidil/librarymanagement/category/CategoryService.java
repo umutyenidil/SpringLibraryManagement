@@ -1,6 +1,9 @@
 package com.umutyenidil.librarymanagement.category;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -26,5 +29,10 @@ public class CategoryService {
         return categoryRepository.findById(id)
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(CategoryNotFoundException::new);
+    }
+
+    public Page<CategoryResponse> findAllCategories(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+                .map(categoryMapper::toCategoryResponse);
     }
 }
