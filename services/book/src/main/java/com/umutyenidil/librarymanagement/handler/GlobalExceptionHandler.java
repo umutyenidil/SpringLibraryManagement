@@ -5,6 +5,7 @@ import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.category.CategoryDuplicationException;
 import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import com.umutyenidil.librarymanagement.genre.GenreDuplicationException;
+import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -123,6 +124,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.builder()
                         .message(messageSource.getMessage("error.genre.duplicate", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(GenreNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleGenreNotFoundException(GenreNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.genre.notfound", null, LocaleContextHolder.getLocale()))
                         .build());
     }
 }

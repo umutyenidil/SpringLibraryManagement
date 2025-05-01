@@ -3,10 +3,7 @@ package com.umutyenidil.librarymanagement.genre;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -22,5 +19,12 @@ public class GenreController {
             @RequestBody @Valid GenreRequest request
     ) {
         return ResponseEntity.ok(genreService.saveGenre(request));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GenreResponse> findGenreById(
+            @PathVariable UUID id
+    ) {
+        return ResponseEntity.ok(genreService.findGenreById(id));
     }
 }

@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.genre;
 
+import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,11 @@ public class GenreService {
         var savedGenre = genreRepository.save(genre);
 
         return savedGenre.getId();
+    }
+
+    public GenreResponse findGenreById(UUID id) {
+        return genreRepository.findByIdAndDeletedAtIsNull(id)
+                .map(genreMapper::toGenreResponse)
+                .orElseThrow(GenreNotFoundException::new);
     }
 }
