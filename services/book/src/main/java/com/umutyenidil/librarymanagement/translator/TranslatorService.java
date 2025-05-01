@@ -1,6 +1,9 @@
 package com.umutyenidil.librarymanagement.translator;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -24,5 +27,10 @@ public class TranslatorService {
         return translatorRepository.findByIdAndDeletedAtIsNull(id)
                 .map(translatorMapper::toTranslatorResponse)
                 .orElseThrow(TranslatorNotFoundException::new);
+    }
+
+    public Page<TranslatorResponse> findAllTranslators(Pageable pageable) {
+        return translatorRepository.findAllByDeletedAtIsNull(pageable)
+                .map(translatorMapper::toTranslatorResponse);
     }
 }
