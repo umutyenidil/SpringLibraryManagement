@@ -38,4 +38,13 @@ public class GenreController {
     ) {
         return ResponseEntity.ok(genreService.findAllGenres(PageRequest.of(page - 1, size)));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteGenreById(
+            @PathVariable UUID id
+    ) {
+        genreService.deleteGenreById(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

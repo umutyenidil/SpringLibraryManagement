@@ -3,11 +3,13 @@ package com.umutyenidil.librarymanagement.genre;
 import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -18,7 +20,7 @@ public class GenreService {
     private final GenreMapper genreMapper;
 
     public UUID saveGenre(GenreRequest request) {
-        if(genreRepository.existsByNameIgnoreCase(request.name())) throw new GenreDuplicationException();
+        if (genreRepository.existsByNameIgnoreCase(request.name())) throw new GenreDuplicationException();
 
         var genre = genreMapper.toGenre(request);
 
@@ -36,5 +38,13 @@ public class GenreService {
     public Page<GenreResponse> findAllGenres(Pageable pageable) {
         return genreRepository.findAllByDeletedAtIsNull(pageable)
                 .map(genreMapper::toGenreResponse);
+    }
+
+    public void deleteGenreById(UUID id) {
+        genreRepository.findByIdAndDeletedAtIsNull(id)
+                .ifPresent(genre -> {
+                    genre.setDeletedAt(LocalDateTime.now());
+                    genreRepository.save(genre);
+                });
     }
 }
