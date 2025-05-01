@@ -11,6 +11,7 @@ import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import com.umutyenidil.librarymanagement.publisher.Publisher;
 import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
 import com.umutyenidil.librarymanagement.publisher.PublisherNotFoundException;
+import com.umutyenidil.librarymanagement.translator.TranslatorNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -154,6 +155,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
                         .message(messageSource.getMessage("error.publisher.notfound", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(TranslatorNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTranslatorNotFoundException(TranslatorNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.translator.notfound", null, LocaleContextHolder.getLocale()))
                         .build());
     }
 }

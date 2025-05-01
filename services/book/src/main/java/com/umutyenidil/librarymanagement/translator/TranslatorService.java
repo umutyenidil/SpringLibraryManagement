@@ -1,6 +1,5 @@
 package com.umutyenidil.librarymanagement.translator;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +18,11 @@ public class TranslatorService {
         translatorRepository.save(translator);
 
         return translator.getId();
+    }
+
+    public TranslatorResponse findTranslatorById(UUID id) {
+        return translatorRepository.findByIdAndDeletedAtIsNull(id)
+                .map(translatorMapper::toTranslatorResponse)
+                .orElseThrow(TranslatorNotFoundException::new);
     }
 }
