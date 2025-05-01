@@ -27,7 +27,7 @@ public class CategoryService {
     }
 
     public CategoryResponse findCategoryById(UUID id) {
-        return categoryRepository.findById(id)
+        return categoryRepository.findByIdAndDeletedAtIsNull(id)
                 .map(categoryMapper::toCategoryResponse)
                 .orElseThrow(CategoryNotFoundException::new);
     }

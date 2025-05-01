@@ -1,13 +1,9 @@
 package com.umutyenidil.librarymanagement.category;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.umutyenidil.librarymanagement._core.repository.SoftDeletableJpaRepository;
 
 import java.util.UUID;
 
-public interface CategoryRepository extends JpaRepository<Category, UUID> {
+public interface CategoryRepository extends SoftDeletableJpaRepository<Category, UUID> {
     boolean existsByNameIgnoreCase(String name);
-
-    Page<Category> findAllByDeletedAtIsNull(Pageable pageable);
 }
