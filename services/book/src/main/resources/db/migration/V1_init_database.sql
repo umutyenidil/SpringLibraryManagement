@@ -12,12 +12,12 @@ CREATE TABLE publishers
     updated_at TIMESTAMP
 );
 
-CREATE TABLE genre
+CREATE TABLE genres
 (
     id         UUID PRIMARY KEY,
     name       VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP
 );
 
@@ -25,8 +25,8 @@ CREATE TABLE categories
 (
     id         UUID PRIMARY KEY,
     name       VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP
 );
 
