@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -32,7 +33,14 @@ public class CategoryService {
     }
 
     public Page<CategoryResponse> findAllCategories(Pageable pageable) {
-        return categoryRepository.findAll(pageable)
+        return categoryRepository.findAllByDeletedAtIsNull(pageable)
                 .map(categoryMapper::toCategoryResponse);
+    }
+
+    public void deleteCategoryById(UUID id) {
+        categoryRepository.findById(id).ifPresent(category -> {
+            category.setDeletedAt(LocalDateTime.now());
+            categoryRepository.save(category);
+        });
     }
 }

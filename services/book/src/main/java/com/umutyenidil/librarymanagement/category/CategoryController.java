@@ -37,4 +37,13 @@ public class CategoryController {
     ) {
         return ResponseEntity.ok(categoryService.findAllCategories(PageRequest.of(page - 1, size)));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategoryById(
+            @PathVariable UUID id
+    ){
+        categoryService.deleteCategoryById(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
