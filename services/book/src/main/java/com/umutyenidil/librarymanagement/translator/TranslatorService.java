@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -32,5 +33,13 @@ public class TranslatorService {
     public Page<TranslatorResponse> findAllTranslators(Pageable pageable) {
         return translatorRepository.findAllByDeletedAtIsNull(pageable)
                 .map(translatorMapper::toTranslatorResponse);
+    }
+
+    public void deleteTranslatorById(UUID id) {
+        translatorRepository.findByIdAndDeletedAtIsNull(id)
+                .ifPresent(translator -> {
+                    translator.setDeletedAt(LocalDateTime.now());
+                    translatorRepository.save(translator);
+                });
     }
 }

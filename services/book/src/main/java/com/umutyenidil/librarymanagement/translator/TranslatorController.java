@@ -37,4 +37,13 @@ public class TranslatorController {
     ) {
         return ResponseEntity.ok(translatorService.findAllTranslators(PageRequest.of(page - 1, size)));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTranslatorById(
+            @PathVariable UUID id
+    ) {
+        translatorService.deleteTranslatorById(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }
