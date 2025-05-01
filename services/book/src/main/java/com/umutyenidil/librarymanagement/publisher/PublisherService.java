@@ -1,0 +1,24 @@
+package com.umutyenidil.librarymanagement.publisher;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class PublisherService {
+
+    private final PublisherRepository publisherRepository;
+    private final PublisherMapper publisherMapper;
+
+    public UUID savePublisher(PublisherRequest request) {
+        if(publisherRepository.existsByNameIgnoreCase(request.name())) throw new PublisherDuplicationException();
+
+        var publisher = publisherMapper.toPublisher(request);
+
+        publisherRepository.save(publisher);
+
+        return publisher.getId();
+    }
+}

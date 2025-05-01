@@ -8,6 +8,8 @@ import com.umutyenidil.librarymanagement.genre.GenreDuplicationException;
 import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
+import com.umutyenidil.librarymanagement.publisher.Publisher;
+import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -133,6 +135,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
                         .message(messageSource.getMessage("error.genre.notfound", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(PublisherDuplicationException.class)
+    public ResponseEntity<ErrorResponse> handlePublisherDuplicationException(PublisherDuplicationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.publisher.duplicate", null, LocaleContextHolder.getLocale()))
                         .build());
     }
 }
