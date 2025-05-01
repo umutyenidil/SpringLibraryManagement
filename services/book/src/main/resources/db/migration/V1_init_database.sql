@@ -8,18 +8,18 @@ CREATE TABLE publishers
 (
     id         UUID PRIMARY KEY,
     name       VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT NULL
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP             DEFAULT NULL
 );
 
 CREATE TABLE genres
 (
     id         UUID PRIMARY KEY,
     name       VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP DEFAULT NULL
+    created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP             DEFAULT NULL
 );
 
 CREATE TABLE categories
@@ -41,14 +41,14 @@ CREATE TABLE authors
     deleted_at TIMESTAMP
 );
 
-CREATE TABLE translator
+CREATE TABLE translators
 (
     id         UUID PRIMARY KEY,
     name       VARCHAR(255),
     surname    VARCHAR(255),
-    created_at TIMESTAMP,
-    updated_at TIMESTAMP,
-    deleted_at TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP          DEFAULT NULL
 );
 
 CREATE TABLE book
