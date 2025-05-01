@@ -3,6 +3,9 @@ package com.umutyenidil.librarymanagement.genre;
 import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -28,5 +31,10 @@ public class GenreService {
         return genreRepository.findByIdAndDeletedAtIsNull(id)
                 .map(genreMapper::toGenreResponse)
                 .orElseThrow(GenreNotFoundException::new);
+    }
+
+    public Page<GenreResponse> findAllGenres(Pageable pageable) {
+        return genreRepository.findAllByDeletedAtIsNull(pageable)
+                .map(genreMapper::toGenreResponse);
     }
 }
