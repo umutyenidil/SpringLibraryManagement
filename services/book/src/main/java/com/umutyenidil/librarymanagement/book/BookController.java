@@ -1,11 +1,13 @@
 package com.umutyenidil.librarymanagement.book;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -15,6 +17,8 @@ public class BookController {
 
     private final BookService bookService;
     private final BookMapper bookMapper;
+    private final BookCopyService bookCopyService;
+    private final BookCopyMapper bookCopyMapper;
 
     @PostMapping
     public ResponseEntity<UUID> saveBook(
@@ -23,6 +27,24 @@ public class BookController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(bookService.saveBook(request));
+    }
+
+    @PostMapping("/{book-id}/copies")
+    public ResponseEntity<List<UUID>> saveBookCopies(
+            @PathVariable("book-id") UUID bookId,
+            @RequestBody @Valid MultiBookCopyCreateRequest request
+    ) {
+        var bookCopies = request
+                .bookCopies()
+                .stream()
+                .map(bookCopyCreateRequest -> bookCopyMapper.toBookCopy(bookId, bookCopyCreateRequest))
+                .toList();
+
+        var savedBookCopyIds = bookCopyService.saveBookCopies(bookCopies);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(savedBookCopyIds);
     }
 
     @GetMapping("/{id}")

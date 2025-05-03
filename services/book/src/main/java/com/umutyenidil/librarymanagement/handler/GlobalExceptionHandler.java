@@ -157,4 +157,14 @@ public class GlobalExceptionHandler {
                         .message(messageSource.getMessage("error.publisher.notfound", null, LocaleContextHolder.getLocale()))
                         .build());
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.builder()
+                        .message(messageSource.getMessage("error.common.internalserver", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
 }
