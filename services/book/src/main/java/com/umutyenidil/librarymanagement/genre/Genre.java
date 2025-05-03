@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.genre;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.umutyenidil.librarymanagement.book.Book;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,7 @@ public class Genre {
     private String name;
 
     @ManyToMany(mappedBy = "genres")
+    @JsonBackReference
     private List<Book> books;
 
     @CreatedDate

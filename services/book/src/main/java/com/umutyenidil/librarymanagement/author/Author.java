@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.author;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.umutyenidil.librarymanagement._core.entity.SoftDeletableEntity;
 import com.umutyenidil.librarymanagement.book.Book;
 import jakarta.persistence.*;
@@ -29,6 +30,7 @@ public class Author {
     private String surname;
 
     @ManyToMany(mappedBy = "authors")
+    @JsonBackReference
     private List<Book> books;
 
     @CreatedDate

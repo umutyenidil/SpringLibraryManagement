@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.book;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.umutyenidil.librarymanagement.author.Author;
 import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.genre.Genre;
@@ -73,6 +74,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
+    @JsonManagedReference
     private List<Genre> genres;
 
     @ManyToMany
@@ -81,6 +83,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
+    @JsonManagedReference
     private List<Category> categories;
 
     @ManyToMany
@@ -89,6 +92,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
+    @JsonManagedReference
     private List<Author> authors;
 
     @ManyToMany
@@ -97,6 +101,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "translator_id")
     )
+    @JsonManagedReference
     private List<Author> translators;
 
     @OneToMany(mappedBy = "book")

@@ -117,4 +117,9 @@ public class BookService {
 
         return savedBook.getId();
     }
+
+    public Book findBookById(UUID id) {
+        return bookRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+    }
 }
