@@ -11,6 +11,13 @@ public class LanguageMapper {
                 .build();
     }
 
+    public Language toLanguage(LanguageResponse response) {
+        return Language.builder()
+                .id(response.id())
+                .name(response.name())
+                .build();
+    }
+
     public LanguageResponse toLanguageResponse(Language language) {
         return LanguageResponse.builder()
                 .id(language.getId())

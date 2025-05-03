@@ -19,4 +19,12 @@ public class AuthorMapper {
                 .surname(author.getSurname())
                 .build();
     }
+
+    public Author toAuthor(AuthorResponse response) {
+        return Author.builder()
+                .id(response.id())
+                .name(response.name())
+                .surname(response.surname())
+                .build();
+    }
 }

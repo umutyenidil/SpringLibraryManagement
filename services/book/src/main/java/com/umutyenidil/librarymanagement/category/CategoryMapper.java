@@ -11,6 +11,13 @@ public class CategoryMapper {
                 .build();
     }
 
+    public Category toCategory(CategoryResponse response) {
+        return Category.builder()
+                .id(response.id())
+                .name(response.name())
+                .build();
+    }
+
     public CategoryResponse toCategoryResponse(Category category) {
         return CategoryResponse.builder()
                 .id(category.getId())

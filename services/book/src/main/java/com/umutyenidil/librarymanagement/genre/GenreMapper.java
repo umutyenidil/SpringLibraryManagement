@@ -11,6 +11,13 @@ public class GenreMapper {
                 .build();
     }
 
+    public Genre toGenre(GenreResponse response) {
+        return Genre.builder()
+                .id(response.id())
+                .name(response.name())
+                .build();
+    }
+
     public GenreResponse toGenreResponse(Genre genre) {
         return GenreResponse.builder()
                 .id(genre.getId())

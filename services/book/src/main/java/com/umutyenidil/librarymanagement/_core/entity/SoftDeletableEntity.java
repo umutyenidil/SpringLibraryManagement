@@ -11,5 +11,4 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class SoftDeletableEntity extends AuditableEntity {
 
-    private LocalDateTime deletedAt;
 }

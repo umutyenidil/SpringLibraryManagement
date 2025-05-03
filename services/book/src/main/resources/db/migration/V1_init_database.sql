@@ -51,25 +51,25 @@ CREATE TABLE translators
     deleted_at TIMESTAMP          DEFAULT NULL
 );
 
-CREATE TABLE book
+CREATE TABLE books
 (
     id               UUID PRIMARY KEY,
-    original_book_id UUID,
-    name             VARCHAR(255),
-    description      TEXT,
-    audience         VARCHAR(50),
-    language_id      UUID NOT NULL,
-    number_of_pages  INT,
-    publisher_id     UUID NOT NULL,
-    format           VARCHAR(50),
-    edition          INT,
-    publish_date     DATE,
+    original_book_id UUID DEFAULT NULL,
+    name             VARCHAR(255) NOT NULL,
+    description      TEXT DEFAULT NULL,
+    audience         VARCHAR(255) NOT NULL,
+    language_id      UUID         NOT NULL,
+    number_of_pages  INT          NOT NULL,
+    publisher_id     UUID         NOT NULL,
+    format           VARCHAR(255) NOT NULL,
+    edition          INT          NOT NULL,
+    publish_date     DATE         NOT NULL,
     created_at       TIMESTAMP,
     updated_at       TIMESTAMP,
     deleted_at       TIMESTAMP,
-    FOREIGN KEY (original_book_id) REFERENCES book (id),
-    FOREIGN KEY (language_id) REFERENCES language (id),
-    FOREIGN KEY (publisher_id) REFERENCES publisher (id)
+    FOREIGN KEY (original_book_id) REFERENCES books (id),
+    FOREIGN KEY (language_id) REFERENCES languages (id),
+    FOREIGN KEY (publisher_id) REFERENCES publishers (id)
 );
 
 CREATE TABLE book_copy

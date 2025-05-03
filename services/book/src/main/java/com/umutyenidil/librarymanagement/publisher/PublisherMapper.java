@@ -11,6 +11,13 @@ public class PublisherMapper {
                 .build();
     }
 
+    public Publisher toPublisher(PublisherResponse request) {
+        return Publisher.builder()
+                .id(request.id())
+                .name(request.name())
+                .build();
+    }
+
     public PublisherResponse toPublisherResponse(Publisher publisher) {
         return PublisherResponse.builder()
                 .id(publisher.getId())

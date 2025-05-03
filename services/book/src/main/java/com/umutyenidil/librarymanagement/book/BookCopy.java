@@ -1,6 +1,5 @@
 package com.umutyenidil.librarymanagement.book;
 
-import com.umutyenidil.librarymanagement._core.entity.SoftDeletableEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +11,12 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-public class BookCopy extends SoftDeletableEntity {
+@Table(name = "book_copies")
+public class BookCopy {
+    @Id
+    @GeneratedValue
+    UUID id;
+
     private String barcode;
 
     @ManyToOne
