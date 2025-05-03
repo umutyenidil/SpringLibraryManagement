@@ -25,6 +25,7 @@ public class BookMapper {
     private final GenreMapper genreMapper;
     private final CategoryMapper categoryMapper;
     private final AuthorMapper authorMapper;
+    private final BookCopyMapper bookCopyMapper;
 
     public Book toBook(BookCreateRequest request) {
         return Book.builder()
@@ -138,6 +139,12 @@ public class BookMapper {
                         book.getTranslators()
                                 .stream()
                                 .map(authorMapper::toAuthorResponse)
+                                .toList()
+                )
+                .copies(
+                        book.getCopies()
+                                .stream()
+                                .map(bookCopyMapper::toBookCopyResponse)
                                 .toList()
                 )
                 .build();

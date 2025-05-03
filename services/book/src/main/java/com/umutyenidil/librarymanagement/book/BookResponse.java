@@ -28,6 +28,7 @@ public record BookResponse(
         List<GenreResponse> genres,
         List<CategoryResponse> categories,
         List<AuthorResponse> authors,
-        List<AuthorResponse> translators
+        List<AuthorResponse> translators,
+        List<BookCopyResponse> copies
 ) {
 }

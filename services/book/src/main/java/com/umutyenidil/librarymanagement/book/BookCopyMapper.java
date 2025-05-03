@@ -19,4 +19,13 @@ public class BookCopyMapper {
                 .status(request.status())
                 .build();
     }
+
+    public BookCopyResponse toBookCopyResponse(BookCopy bookCopy) {
+        return BookCopyResponse.builder()
+                .barcode(bookCopy.getBarcode())
+                .acquisitionType(bookCopy.getAcquisitionType())
+                .condition(bookCopy.getCondition())
+                .status(bookCopy.getStatus())
+                .build();
+    }
 }
