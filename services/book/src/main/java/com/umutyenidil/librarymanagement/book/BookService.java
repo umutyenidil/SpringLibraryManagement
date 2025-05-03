@@ -13,6 +13,8 @@ import com.umutyenidil.librarymanagement.language.LanguageService;
 import com.umutyenidil.librarymanagement.publisher.PublisherMapper;
 import com.umutyenidil.librarymanagement.publisher.PublisherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -121,5 +123,9 @@ public class BookService {
     public Book findBookById(UUID id) {
         return bookRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+    }
+
+    public Page<Book> findAllBooks(Pageable pageable) {
+        return bookRepository.findAllByDeletedAtIsNull(pageable);
     }
 }

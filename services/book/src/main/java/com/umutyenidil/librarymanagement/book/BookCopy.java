@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.book;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,7 @@ public class BookCopy {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonBackReference
     private Book book;
 
     @Enumerated(EnumType.STRING)
