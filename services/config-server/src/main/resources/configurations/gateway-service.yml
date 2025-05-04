@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: book-service
+          uri: lb:http://BOOK-SERVICE
+          predicates:
+            - Path=/api/v1/books/**, /api/v1/authors/**, /api/v1/categories/**, /api/v1/genres/**, /api/v1/languages/**
+server:
+  port: 8080
