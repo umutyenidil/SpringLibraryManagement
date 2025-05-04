@@ -13,5 +13,17 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
+  zipkin:
+    container_name: lm_zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - lm_network
+
+networks:
+  lm_network:
+    driver: bridge
+
 volumes:
   lm_postgres_data:
