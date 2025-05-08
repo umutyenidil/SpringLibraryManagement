@@ -29,8 +29,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                                 req.requestMatchers(
-                                        "/api/patron/v1/auth/**",
-                                        "/api/librarian/v1/auth/**"
+                                        "/api/v1/auth/**"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )
