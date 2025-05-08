@@ -9,5 +9,9 @@ spring:
           uri: lb:http://BOOK-SERVICE
           predicates:
             - Path=/api/v1/books/**, /api/v1/authors/**, /api/v1/categories/**, /api/v1/genres/**, /api/v1/languages/**
+        - id: user-service
+          uri: lb:http://USER-SERVICE
+          predicates:
+            - Path=/api/v1/auth/**
 server:
   port: 8080
