@@ -16,5 +16,5 @@ server:
 application:
   security:
     jwt:
-      secret: githubcomumutyenidil
+      secret: githubcomumutyenidilgithubcomumutyenidilgithubcomumutyenidilgithubcomumutyenidilgithubcomumutyenidilgithubcomumutyenidil
       expiration: 8640000

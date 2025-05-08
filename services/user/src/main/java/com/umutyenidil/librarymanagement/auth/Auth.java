@@ -70,7 +70,7 @@ public class Auth implements UserDetails, Principal {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Auth implements UserDetails, Principal {
 
     @Override
     public boolean isEnabled() {
-        return status != Status.INACTIVE;
+        return status == Status.ACTIVE;
     }
 
     public enum Role {
