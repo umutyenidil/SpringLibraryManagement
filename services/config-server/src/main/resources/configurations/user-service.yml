@@ -12,3 +12,9 @@ spring:
 
 server:
   port: 8084
+
+application:
+  security:
+    jwt:
+      secret: githubcomumutyenidil
+      expiration: 8640000
