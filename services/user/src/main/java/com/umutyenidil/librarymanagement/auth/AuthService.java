@@ -18,12 +18,26 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public void register(RegisterRequest request) {
+    public void registerPatron(RegisterRequest request) {
+        if(authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
 
         var auth = Auth.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .role(Auth.Role.PATRON)
+                .status(Auth.Status.ACTIVE)
+                .build();
+
+        authRepository.save(auth);
+    }
+
+    public void registerLibrarian(RegisterRequest request) {
+        if(authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
+
+        var auth = Auth.builder()
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .role(Auth.Role.LIBRARIAN)
                 .status(Auth.Status.ACTIVE)
                 .build();
 
