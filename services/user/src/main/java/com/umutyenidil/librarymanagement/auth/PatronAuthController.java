@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RequestMapping("/patron/api/v1/auth")
+@RequestMapping("/api/patron/v1/auth")
 @RestController
-public class AuthController {
+public class PatronAuthController {
 
     private final AuthService authService;
 
