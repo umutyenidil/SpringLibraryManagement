@@ -15,5 +15,7 @@ spring:
           uri: lb:http://USER-SERVICE
           predicates:
             - Path=/api/v1/auth/**
+          filters:
+            - name: BlockValidateFilter
 server:
   port: 8080
