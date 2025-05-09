@@ -2,6 +2,7 @@ package com.umutyenidil.librarymanagement.auth;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +25,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
+    public ResponseEntity<AuthTokenResponse> login(
             @RequestBody @Valid LoginRequest request
     ) {
         return ResponseEntity.ok(authService.login(request));
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<AuthResponse> validate(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String header
+    ) {
+        return ResponseEntity.ok(authService.validate(header));
     }
 }

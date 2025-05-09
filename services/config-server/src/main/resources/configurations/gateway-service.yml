@@ -9,6 +9,8 @@ spring:
           uri: lb:http://BOOK-SERVICE
           predicates:
             - Path=/api/v1/books/**, /api/v1/authors/**, /api/v1/categories/**, /api/v1/genres/**, /api/v1/languages/**
+          filters:
+            - name: JwtFilter
         - id: user-service
           uri: lb:http://USER-SERVICE
           predicates:

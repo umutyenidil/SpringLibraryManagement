@@ -25,11 +25,15 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<UUID> saveBook(
-            @RequestBody @Valid BookCreateRequest request
+            @RequestBody @Valid BookCreateRequest request,
+            @RequestHeader("X-User-Id") UUID userId
     ) {
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(bookService.saveBook(request));
+                .accepted()
+                .body(userId);
+//        return ResponseEntity
+//                .status(HttpStatus.CREATED)
+//                .body(bookService.saveBook(request));
     }
 
     @PostMapping("/{book-id}/copies")

@@ -2,8 +2,11 @@ package com.umutyenidil.librarymanagement.auth;
 
 import lombok.Builder;
 
+import java.util.UUID;
+
 @Builder
 public record AuthResponse(
-        String accessToken
+        UUID id,
+        Auth.Role role
 ) {
 }

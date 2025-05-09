@@ -4,6 +4,8 @@ import com.umutyenidil.librarymanagement.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,11 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+    private final AuthMapper authMapper;
 
     public void registerPatron(RegisterRequest request) {
-        if(authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
+        if (authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
 
         var auth = Auth.builder()
                 .email(request.email())
@@ -32,7 +36,7 @@ public class AuthService {
     }
 
     public void registerLibrarian(RegisterRequest request) {
-        if(authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
+        if (authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
 
         var auth = Auth.builder()
                 .email(request.email())
@@ -44,7 +48,7 @@ public class AuthService {
         authRepository.save(auth);
     }
 
-    public AuthResponse login(LoginRequest request) {
+    public AuthTokenResponse login(LoginRequest request) {
 
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -58,8 +62,28 @@ public class AuthService {
 
         var accessToken = jwtService.generateToken(claims, auth);
 
-        return AuthResponse.builder()
+        return AuthTokenResponse.builder()
                 .accessToken(accessToken)
                 .build();
+    }
+
+    public AuthResponse validate(String authorizationHeader) {
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer "))
+            throw new UnauthorizedException();
+
+        String jwt = authorizationHeader.substring(7);
+        String email = jwtService.extractEmail(jwt);
+
+        if (email == null) throw new UnauthorizedException();
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        if (!jwtService.isTokenValid(jwt, userDetails)) throw new UnauthorizedException();
+
+        var auth = authRepository.findByEmail(email)
+                .orElseThrow(UnauthorizedException::new);
+
+        return authMapper.toAuthResponse(auth);
     }
 }

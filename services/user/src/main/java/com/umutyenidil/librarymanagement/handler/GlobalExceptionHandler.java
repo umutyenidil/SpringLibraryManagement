@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(
                         ErrorResponse.builder()
-                                .message(messageSource.getMessage("error.body.missing", null, LocaleContextHolder.getLocale()))
+                                .message("{error.body.missing}")
                                 .build()
                 );
     }
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.common.parameter.invalid", null, LocaleContextHolder.getLocale()))
+                        .message("{error.common.parameter.invalid}")
                         .build());
     }
 
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.common.internalserver", null, LocaleContextHolder.getLocale()))
+                        .message("{error.common.internalserver}")
                         .build());
     }
 
