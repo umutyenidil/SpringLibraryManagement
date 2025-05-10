@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.loan;
 
 import com.umutyenidil.librarymanagement.book.Book;
+import com.umutyenidil.librarymanagement.book.BookCopy;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -29,8 +30,8 @@ public class Loan {
     private UUID patronId;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @JoinColumn(name = "book_copy_id")
+    private BookCopy bookCopy;
 
     @Column(nullable = false)
     private LocalDateTime borrowedAt;

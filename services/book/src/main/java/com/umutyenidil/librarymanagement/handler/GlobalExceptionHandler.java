@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.handler;
 
 import com.umutyenidil.librarymanagement.author.AuthorNotFoundException;
+import com.umutyenidil.librarymanagement.book.BookCopyNotFoundException;
 import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.category.CategoryDuplicationException;
 import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
@@ -175,6 +176,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(ErrorResponse.builder()
                         .message("Kullanıcının ödenmemiş cezası bulunuyor")
+                        .build());
+    }
+
+    @ExceptionHandler(BookCopyNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleBookCopyNotFoundException(BookCopyNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ErrorResponse.builder()
+                        .message("Kitap örneği bulunamadı")
                         .build());
     }
 }

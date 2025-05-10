@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.loan;
 
 import com.umutyenidil.librarymanagement.book.Book;
+import com.umutyenidil.librarymanagement.book.BookCopyService;
 import com.umutyenidil.librarymanagement.book.BookRepository;
 import com.umutyenidil.librarymanagement.book.BookService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class LoanService {
 
     private final LoanPenaltyRepository loanPenaltyRepository;
     private final LoanRepository loanRepository;
-    private final BookService bookService;
+    private final BookCopyService bookCopyService;
 
     public UUID saveLoan(LoanCreateRequest request) {
 
@@ -33,14 +34,14 @@ public class LoanService {
 
         if(patronHasUnpaidLoanPenalty) throw new PatronHasUnpaidPenaltyException("patron has unpaid loan penalty");
 
-        var book = bookService.findBookById(UUID.fromString(request.bookId()));
+        var book = bookCopyService.findBookCopyById(UUID.fromString(request.bookCopyId()));
 
         var borrowedAt = LocalDateTime.now();
         var dueAt = borrowedAt.plusDays(7).with(LocalTime.of(23, 59));
 
         var loan = Loan.builder()
                 .patronId(patronId)
-                .book(book)
+                .bookCopy(book)
                 .borrowedAt(borrowedAt)
                 .dueAt(dueAt)
                 .build();

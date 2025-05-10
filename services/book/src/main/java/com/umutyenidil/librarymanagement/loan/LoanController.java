@@ -21,7 +21,7 @@ public class LoanController {
             @RequestBody @Valid LoanCreateRequest request
     ) {
         var extendedRequest = LoanCreateRequest.builder()
-                .bookId(request.bookId())
+                .bookCopyId(request.bookCopyId())
                 .patronId(userId.toString())
                 .build();
 

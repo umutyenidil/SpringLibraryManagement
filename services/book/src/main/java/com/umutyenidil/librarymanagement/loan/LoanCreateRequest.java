@@ -5,8 +5,8 @@ import lombok.Builder;
 
 @Builder
 public record LoanCreateRequest(
-        @NotNull(message = "{error.loan.validation.bookid}")
-        String bookId,
+        @NotNull(message = "{error.loan.validation.bookcopyid.notnull}")
+        String bookCopyId,
 
         String patronId
 ) {

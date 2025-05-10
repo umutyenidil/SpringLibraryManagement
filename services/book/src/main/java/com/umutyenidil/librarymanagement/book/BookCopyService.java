@@ -18,11 +18,16 @@ public class BookCopyService {
     public List<UUID> saveBookCopies(List<BookCopy> bookCopies) {
         var relatedBook = bookService.findBookById(bookCopies.getFirst().getBook().getId());
 
-        if(relatedBook == null) throw new BookNotFoundException("error.book.notfound");
+        if (relatedBook == null) throw new BookNotFoundException("error.book.notfound");
 
         List<BookCopy> savedCopies = bookCopyRepository.saveAll(bookCopies);
         return savedCopies.stream()
                 .map(BookCopy::getId)
                 .toList();
+    }
+
+    public BookCopy findBookCopyById(UUID id) {
+        return bookCopyRepository.findById(id)
+                .orElseThrow(() -> new BookCopyNotFoundException(""));
     }
 }
