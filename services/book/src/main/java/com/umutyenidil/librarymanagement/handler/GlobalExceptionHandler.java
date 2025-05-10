@@ -8,6 +8,7 @@ import com.umutyenidil.librarymanagement.genre.GenreDuplicationException;
 import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
+import com.umutyenidil.librarymanagement.loan.PatronHasUnpaidPenaltyException;
 import com.umutyenidil.librarymanagement.publisher.Publisher;
 import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
 import com.umutyenidil.librarymanagement.publisher.PublisherNotFoundException;
@@ -165,6 +166,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
                         .message(messageSource.getMessage("error.common.internalserver", null, LocaleContextHolder.getLocale()))
+                        .build());
+    }
+
+    @ExceptionHandler(PatronHasUnpaidPenaltyException.class)
+    public ResponseEntity<ErrorResponse> handlePatronHasUnpaidPenaltyException(PatronHasUnpaidPenaltyException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ErrorResponse.builder()
+                        .message("Kullanıcının ödenmemiş cezası bulunuyor")
                         .build());
     }
 }

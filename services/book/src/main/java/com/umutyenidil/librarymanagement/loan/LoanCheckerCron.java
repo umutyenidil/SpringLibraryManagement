@@ -13,7 +13,6 @@ import java.util.UUID;
 public class LoanCheckerCron {
 
     private final LoanService loanService;
-    private final LoanPenaltyService loanPenaltyService;
 
     @Scheduled(cron = "*/15 * * * * *")
     public void checkLoans() {
@@ -29,7 +28,7 @@ public class LoanCheckerCron {
                     )
                     .build();
 
-            loanPenaltyService.saveLoanPenalty(loanPenalty);
+            loanService.saveLoanPenalty(loanPenalty);
         }
     }
 }
