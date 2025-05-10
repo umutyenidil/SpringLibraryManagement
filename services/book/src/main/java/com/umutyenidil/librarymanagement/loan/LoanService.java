@@ -7,8 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -35,5 +37,13 @@ public class LoanService {
         var savedLoan = loanRepository.save(loan);
 
         return savedLoan.getId();
+    }
+
+    public List<UUID> findUnreturnedLoanIdsIn24Hours() {
+
+        final var start = LocalDate.now().minusDays(1).atStartOfDay();
+        final var end = LocalDate.now().atStartOfDay();
+
+        return loanRepository.findUnreturnedLoanIdsWithoutPenaltyBetweenDates(start, end);
     }
 }
