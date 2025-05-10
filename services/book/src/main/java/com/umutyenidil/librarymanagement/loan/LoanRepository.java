@@ -19,4 +19,12 @@ public interface LoanRepository extends SoftDeletableJpaRepository<Loan, UUID> {
             )
             """)
     List<UUID> findUnreturnedLoanIdsWithoutPenaltyBetweenDates(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("""
+    SELECT COUNT(l) > 0
+    FROM Loan l
+    WHERE l.bookCopy.id = :bookCopyId
+    AND l.returnedAt IS NULL
+    """)
+    boolean existsActiveLoanByBookCopyId(@Param("bookCopyId") UUID bookCopyId);
 }

@@ -34,14 +34,18 @@ public class LoanService {
 
         if(patronHasUnpaidLoanPenalty) throw new PatronHasUnpaidPenaltyException("patron has unpaid loan penalty");
 
-        var book = bookCopyService.findBookCopyById(UUID.fromString(request.bookCopyId()));
+        var bookCopy = bookCopyService.findBookCopyById(UUID.fromString(request.bookCopyId()));
+
+        var bookCopyAvailable = loanRepository.existsActiveLoanByBookCopyId(UUID.fromString(request.bookCopyId()));
+
+        if(!bookCopyAvailable) throw new BookCopyNotAvailableException("");
 
         var borrowedAt = LocalDateTime.now();
         var dueAt = borrowedAt.plusDays(7).with(LocalTime.of(23, 59));
 
         var loan = Loan.builder()
                 .patronId(patronId)
-                .bookCopy(book)
+                .bookCopy(bookCopy)
                 .borrowedAt(borrowedAt)
                 .dueAt(dueAt)
                 .build();

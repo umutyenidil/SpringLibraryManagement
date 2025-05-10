@@ -9,6 +9,7 @@ import com.umutyenidil.librarymanagement.genre.GenreDuplicationException;
 import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
+import com.umutyenidil.librarymanagement.loan.BookCopyNotAvailableException;
 import com.umutyenidil.librarymanagement.loan.PatronHasUnpaidPenaltyException;
 import com.umutyenidil.librarymanagement.publisher.Publisher;
 import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
@@ -185,6 +186,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.FORBIDDEN)
                 .body(ErrorResponse.builder()
                         .message("Kitap örneği bulunamadı")
+                        .build());
+    }
+
+    @ExceptionHandler(BookCopyNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> handleBookCopyNotAvailableException(BookCopyNotAvailableException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.builder()
+                        .message("Kitap örneği baskasi tarafindan odunc alinmis")
                         .build());
     }
 }
