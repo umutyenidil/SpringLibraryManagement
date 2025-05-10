@@ -36,9 +36,9 @@ public class LoanService {
 
         var bookCopy = bookCopyService.findBookCopyById(UUID.fromString(request.bookCopyId()));
 
-        var bookCopyAvailable = loanRepository.existsActiveLoanByBookCopyId(UUID.fromString(request.bookCopyId()));
+        var existsActiveLoanByBookCopy = loanRepository.existsActiveLoanByBookCopyId(UUID.fromString(request.bookCopyId()));
 
-        if(!bookCopyAvailable) throw new BookCopyNotAvailableException("");
+        if(existsActiveLoanByBookCopy) throw new BookCopyNotAvailableException("");
 
         var borrowedAt = LocalDateTime.now();
         var dueAt = borrowedAt.plusDays(7).with(LocalTime.of(23, 59));
