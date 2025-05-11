@@ -6,7 +6,6 @@ import com.umutyenidil.librarymanagement.category.CategoryMapper;
 import com.umutyenidil.librarymanagement.category.CategoryService;
 import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import com.umutyenidil.librarymanagement.genre.GenreMapper;
-import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.genre.GenreService;
 import com.umutyenidil.librarymanagement.language.LanguageMapper;
 import com.umutyenidil.librarymanagement.language.LanguageService;
@@ -107,7 +106,7 @@ public class BookService {
         var genres = book.getGenres()
                 .stream()
                 .map(genre -> {
-                    if(genre.getId() == null) throw new GenreNotFoundException();
+                    if(genre.getId() == null) throw new ResourceNotFoundException("error.genre.notfound");
 
                     var genreResponse = genreService.findGenreById(genre.getId());
                     return genreMapper.toGenre(genreResponse);

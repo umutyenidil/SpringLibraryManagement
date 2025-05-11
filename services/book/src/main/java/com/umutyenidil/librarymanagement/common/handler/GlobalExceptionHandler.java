@@ -7,7 +7,6 @@ import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
 import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
-import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import com.umutyenidil.librarymanagement.loan.BookCopyNotAvailableException;
@@ -114,15 +113,6 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
                         .message(messageUtil.getMessage("error.author.notfound"))
-                        .build());
-    }
-
-    @ExceptionHandler(GenreNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleGenreNotFoundException(GenreNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.genre.notfound"))
                         .build());
     }
 

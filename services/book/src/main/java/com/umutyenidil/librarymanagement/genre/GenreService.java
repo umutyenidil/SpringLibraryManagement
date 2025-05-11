@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.genre;
 
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,8 @@ public class GenreService {
     public UUID saveGenre(GenreCreateRequest request) {
 
         // ayni isimli baska bir tur var ise hata firlat
-        if (genreRepository.existsByNameIgnoreCase(request.name())) throw new ResourceDuplicationException("error.genre.duplicate");
+        if (genreRepository.existsByNameIgnoreCase(request.name()))
+            throw new ResourceDuplicationException("error.genre.duplicate");
 
         // istek turunu istek nesnesine donustur
         var genre = genreMapper.toGenre(request);
@@ -32,9 +34,10 @@ public class GenreService {
     }
 
     public GenreResponse findGenreById(UUID id) {
+
         return genreRepository.findByIdAndDeletedAtIsNull(id)
                 .map(genreMapper::toGenreResponse)
-                .orElseThrow(GenreNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException("error.genre.notfound"));
     }
 
     public Page<Genre> findAllGenres(Pageable pageable) {

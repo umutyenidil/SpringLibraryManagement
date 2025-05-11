@@ -35,10 +35,11 @@ public class GenreController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GenreResponse> findGenreById(
+    public ResponseEntity<SuccessResponse<GenreResponse>> findGenreById(
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(genreService.findGenreById(id));
+        return ResponseEntity
+                .ok(SuccessResponse.of(genreService.findGenreById(id)));
     }
 
     @GetMapping
