@@ -46,7 +46,11 @@ public class CategoryService {
     }
 
     public void deleteCategoryById(UUID id) {
+
+        // soft delete icin kategoriyi kontrol et
         categoryRepository.findById(id).ifPresent(category -> {
+
+            // kategorinin deleted at degerini guncelle ve kaydet
             category.setDeletedAt(LocalDateTime.now());
             categoryRepository.save(category);
         });

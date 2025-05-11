@@ -2,8 +2,6 @@ package com.umutyenidil.librarymanagement.common.handler;
 
 import com.umutyenidil.librarymanagement.author.AuthorNotFoundException;
 import com.umutyenidil.librarymanagement.book.BookCopyNotFoundException;
-import com.umutyenidil.librarymanagement.category.CategoryDuplicationException;
-import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
@@ -119,25 +117,6 @@ public class GlobalExceptionHandler {
                         .message(messageUtil.getMessage("error.author.notfound"))
                         .build());
     }
-
-    @ExceptionHandler(CategoryDuplicationException.class)
-    public ResponseEntity<ErrorResponse> handleCategoryDuplicationException(CategoryDuplicationException ex) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.category.duplication"))
-                        .build());
-    }
-
-    @ExceptionHandler(CategoryNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleCategoryDuplicationException(CategoryNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.category.notfound"))
-                        .build());
-    }
-
 
     @ExceptionHandler(GenreDuplicationException.class)
     public ResponseEntity<ErrorResponse> handleGenreDuplicationException(GenreDuplicationException ex) {

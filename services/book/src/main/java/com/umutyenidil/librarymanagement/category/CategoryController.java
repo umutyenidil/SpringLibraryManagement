@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.category;
 
+import com.umutyenidil.librarymanagement.common.dto.response.MessageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
@@ -56,12 +57,13 @@ public class CategoryController {
         );
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategoryById(
+    public ResponseEntity<MessageResponse> deleteCategoryById(
             @PathVariable UUID id
     ) {
         categoryService.deleteCategoryById(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of(messageUtil.getMessage("success.category.delete")));
     }
 }

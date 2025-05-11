@@ -3,8 +3,8 @@ package com.umutyenidil.librarymanagement.book;
 import com.umutyenidil.librarymanagement.author.AuthorMapper;
 import com.umutyenidil.librarymanagement.author.AuthorService;
 import com.umutyenidil.librarymanagement.category.CategoryMapper;
-import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import com.umutyenidil.librarymanagement.category.CategoryService;
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import com.umutyenidil.librarymanagement.genre.GenreMapper;
 import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.genre.GenreService;
@@ -96,7 +96,7 @@ public class BookService {
         var categories = book.getCategories()
                 .stream()
                 .map(category -> {
-                    if(category.getId() == null) throw new CategoryNotFoundException();
+                    if(category.getId() == null) throw new ResourceNotFoundException("error.category.notfound");
 
                     var categoryResponse = categoryService.findCategoryById(category.getId());
                     return categoryMapper.toCategory(categoryResponse);
