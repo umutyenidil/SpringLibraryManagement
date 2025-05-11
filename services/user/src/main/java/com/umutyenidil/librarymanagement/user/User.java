@@ -28,6 +28,10 @@ public class User {
     @Column(nullable = false)
     private String surname;
 
+    private String phone;
+
+    private String fullAddress;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

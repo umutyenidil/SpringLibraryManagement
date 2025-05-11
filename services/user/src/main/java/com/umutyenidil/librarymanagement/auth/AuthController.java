@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -18,14 +19,12 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> register(
-            @RequestBody @Valid RegisterRequest request
+    @PostMapping("/register-patron")
+    public ResponseEntity<BaseResponse<UUID>> registerPatron(
+            @RequestBody @Validated(PatronValidationGroup.class) RegisterRequest request
     ) {
-        authService.registerPatron(request);
 
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.ok(SuccessResponse.of(authService.registerPatron(request)));
     }
 
     @PostMapping("/login")
@@ -44,7 +43,7 @@ public class AuthController {
 
     @PostMapping("/register-librarian")
     public ResponseEntity<BaseResponse<UUID>> registerLibrarian(
-        @RequestBody @Valid LibrarianRegisterRequest request
+        @RequestBody @Validated(LibrarianValidationGroup.class) RegisterRequest request
     ) {
 
         return ResponseEntity.ok(SuccessResponse.of(authService.registerLibrarian(request)));

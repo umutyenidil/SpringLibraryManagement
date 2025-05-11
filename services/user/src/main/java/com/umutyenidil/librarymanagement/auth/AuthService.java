@@ -26,34 +26,52 @@ public class AuthService {
     private final UserDetailsService userDetailsService;
     private final AuthMapper authMapper;
     private final UserService userService;
-    private final UserRepository userRepository;
 
-    public void registerPatron(RegisterRequest request) {
+    public UUID registerPatron(RegisterRequest request) {
+
+        // eger e-posta daha once kullanilmissa hata firlat
         if (authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
 
+
+        // yeni auth nesnesi olustur ve veritabanina kaydet
         var auth = Auth.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .role(Auth.Role.PATRON)
                 .status(Auth.Status.ACTIVE)
                 .build();
+        var savedAuth = authRepository.save(auth);
 
-        authRepository.save(auth);
+        // user servisi ile kullanicinin bilgilerini kaydet
+        userService.saveUser(
+                User.builder()
+                        .id(savedAuth.getId())
+                        .name(request.userDetail().name())
+                        .surname(request.userDetail().surname())
+                        .phone(request.userDetail().phone())
+                        .fullAddress(request.userDetail().fullAddress())
+                        .build()
+        );
+
+        // kaydedilen kullanicinin id'sini dondur
+        return savedAuth.getId();
     }
 
-    public UUID registerLibrarian(LibrarianRegisterRequest request) {
+    public UUID registerLibrarian(RegisterRequest request) {
 
+        // eger e-posta daha once kullanilmissa hata firlat
         if (authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
 
+        // yeni auth nesnesi olustur ve veritabanina kaydet
         var auth = Auth.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .role(Auth.Role.LIBRARIAN)
                 .status(Auth.Status.ACTIVE)
                 .build();
-
         var savedAuth = authRepository.save(auth);
 
+        // user servisi ile kullanicinin bilgilerini kaydet
         userService.saveUser(
                 User.builder()
                         .id(savedAuth.getId())
@@ -62,6 +80,7 @@ public class AuthService {
                         .build()
         );
 
+        // kaydedilen kullanicinin id'sini dondur
         return savedAuth.getId();
     }
 
