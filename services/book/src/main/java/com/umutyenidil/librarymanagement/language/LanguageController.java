@@ -51,10 +51,12 @@ public class LanguageController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<LanguageResponse> findLanguageById(
+    public ResponseEntity<SuccessResponse<LanguageResponse>> findLanguageById(
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(languageService.findLanguageById(id));
+        return ResponseEntity.ok(
+                SuccessResponse.of(languageService.findLanguageById(id))
+        );
     }
 
     @DeleteMapping(path = "/{id}")

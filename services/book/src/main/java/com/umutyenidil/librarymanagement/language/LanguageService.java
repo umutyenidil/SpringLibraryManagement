@@ -38,6 +38,7 @@ public class LanguageService {
     public LanguageResponse findLanguageById(
             UUID id
     ) {
+
         return languageRepository.findById(id)
                 .map(languageMapper::toLanguageResponse)
                 .orElseThrow(() -> new ResourceNotFoundException("error.language.notfound"));
