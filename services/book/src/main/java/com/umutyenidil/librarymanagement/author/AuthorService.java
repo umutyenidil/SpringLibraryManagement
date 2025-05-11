@@ -31,8 +31,8 @@ public class AuthorService {
                 .orElseThrow(() -> new ResourceNotFoundException("error.author.notfound"));
     }
 
-    public Page<AuthorResponse> findAllAuthors(Pageable pageable) {
-        return authorRepository.findAll(pageable)
-                .map(authorMapper::toAuthorResponse);
+    public Page<Author> findAllAuthors(Pageable pageable) {
+
+        return authorRepository.findAll(pageable);
     }
 }

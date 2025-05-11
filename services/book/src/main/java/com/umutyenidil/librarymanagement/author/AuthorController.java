@@ -1,8 +1,10 @@
 package com.umutyenidil.librarymanagement.author;
 
+import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ public class AuthorController {
 
     private final AuthorService authorService;
     private final MessageUtil messageUtil;
+    private final AuthorMapper authorMapper;
 
     @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
@@ -45,10 +48,16 @@ public class AuthorController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<AuthorResponse>> findAllAuthors(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size
+    public ResponseEntity<PageResponse<AuthorResponse>> findAllAuthors(
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size
     ) {
-        return ResponseEntity.ok(authorService.findAllAuthors(PageRequest.of(page - 1, size)));
+
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        authorService.findAllAuthors(PageRequest.of(page - 1, size))
+                                .map(authorMapper::toAuthorResponse)
+                )
+        );
     }
 }
