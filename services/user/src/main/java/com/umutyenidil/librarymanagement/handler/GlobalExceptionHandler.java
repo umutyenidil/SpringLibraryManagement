@@ -4,6 +4,7 @@ package com.umutyenidil.librarymanagement.handler;
 import com.umutyenidil.librarymanagement.auth.EmailAlreadyExistsException;
 import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
+import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
@@ -27,17 +28,13 @@ import java.util.HashMap;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private final MessageSource messageSource;
-
-    private String getMessage(String code) {
-        return messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
-    }
+    private final MessageUtil messageUtil;
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ResponseEntity
                 .badRequest()
-                .body(ErrorResponse.of(getMessage("error.body.missing")));
+                .body(ErrorResponse.of(messageUtil.getMessage("error.body.missing")));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -53,7 +50,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ValidationResponse.of(errors, getMessage("error.common.validation")));
+                .body(ValidationResponse.of(errors, messageUtil.getMessage(("error.common.validation"))));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -70,7 +67,7 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage(), ex);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.of(getMessage("error.common.internalserver")));
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.common.internalserver"))));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -88,21 +85,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(ErrorResponse.of(getMessage("error.common.auth.unauthorized")));
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.common.auth.unauthorized"))));
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ErrorResponse.of(getMessage("error.auth.emailexists")));
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.auth.emailexists"))));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponse.of(getMessage("error.common.noresourcefound")));
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.common.noresourcefound"))));
     }
 }
 

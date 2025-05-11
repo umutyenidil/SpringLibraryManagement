@@ -122,4 +122,9 @@ public class AuthService {
 
         return authMapper.toAuthResponse(auth);
     }
+
+    public boolean existsPatronById(UUID id) {
+
+        return authRepository.existsByIdAndRoleAndStatus(id, Auth.Role.PATRON, Auth.Status.ACTIVE);
+    }
 }
