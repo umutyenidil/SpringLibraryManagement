@@ -16,7 +16,7 @@ public class LibrarianSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         try {
-            var umut = RegisterRequest.builder()
+            var umut = LibrarianRegisterRequest.builder()
                     .email("umut@librarymanagement.com")
                     .password("umut")
                     .build();

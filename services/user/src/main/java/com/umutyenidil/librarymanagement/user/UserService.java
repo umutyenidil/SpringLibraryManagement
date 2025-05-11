@@ -1,0 +1,16 @@
+package com.umutyenidil.librarymanagement.user;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@RequiredArgsConstructor
+@Service
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    public void saveUser(User user) {
+
+        userRepository.save(user);
+    }
+}

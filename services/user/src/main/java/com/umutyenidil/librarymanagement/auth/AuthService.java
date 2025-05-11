@@ -1,6 +1,9 @@
 package com.umutyenidil.librarymanagement.auth;
 
 import com.umutyenidil.librarymanagement.security.JwtService;
+import com.umutyenidil.librarymanagement.user.User;
+import com.umutyenidil.librarymanagement.user.UserRepository;
+import com.umutyenidil.librarymanagement.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final AuthMapper authMapper;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
     public void registerPatron(RegisterRequest request) {
         if (authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
@@ -35,7 +41,8 @@ public class AuthService {
         authRepository.save(auth);
     }
 
-    public void registerLibrarian(RegisterRequest request) {
+    public UUID registerLibrarian(LibrarianRegisterRequest request) {
+
         if (authRepository.findByEmail(request.email()).isPresent()) throw new EmailAlreadyExistsException();
 
         var auth = Auth.builder()
@@ -45,7 +52,17 @@ public class AuthService {
                 .status(Auth.Status.ACTIVE)
                 .build();
 
-        authRepository.save(auth);
+        var savedAuth = authRepository.save(auth);
+
+        userService.saveUser(
+                User.builder()
+                        .id(savedAuth.getId())
+                        .name(request.userDetail().name())
+                        .surname(request.userDetail().surname())
+                        .build()
+        );
+
+        return savedAuth.getId();
     }
 
     public AuthTokenResponse login(LoginRequest request) {

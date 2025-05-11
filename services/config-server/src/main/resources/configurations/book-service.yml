@@ -18,5 +18,6 @@ spring:
     password: ${spring.datasource.password}
   messages:
     basename: i18n/messages
+    encoding: UTF-8
 server:
   port: 8083
