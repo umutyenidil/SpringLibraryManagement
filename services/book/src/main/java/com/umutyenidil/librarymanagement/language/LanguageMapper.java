@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LanguageMapper {
 
-    public Language toLanguage(LanguageRequest request) {
+    public Language toLanguage(LanguageCreateRequest request) {
         return Language.builder()
                 .name(request.name())
                 .build();

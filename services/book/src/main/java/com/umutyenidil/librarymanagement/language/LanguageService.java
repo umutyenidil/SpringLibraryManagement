@@ -1,12 +1,13 @@
 package com.umutyenidil.librarymanagement.language;
 
+import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,13 +16,18 @@ public class LanguageService {
     private final LanguageRepository languageRepository;
     private final LanguageMapper languageMapper;
 
-    public UUID saveLanguage(LanguageRequest request) {
-        if (languageRepository.existsByNameIgnoreCase(request.name())) throw new LanguageDuplicatonException();
+    public UUID saveLanguage(LanguageCreateRequest request) {
 
+        // ayni isimli bir dil varsa hata firlat
+        if (languageRepository.existsByNameIgnoreCase(request.name())) throw new ResourceDuplicationException("error.language.duplicate");
+
+        // request dto'dan entity'e donusum yap
         var language = languageMapper.toLanguage(request);
 
+        // dili veritabanina kaydet
         var savedLanguage = languageRepository.save(language);
 
+        // veritabanina kaydedilen dilin id'sini dondur
         return savedLanguage.getId();
     }
 
@@ -35,7 +41,7 @@ public class LanguageService {
     ) {
         return languageRepository.findById(id)
                 .map(languageMapper::toLanguageResponse)
-                .orElseThrow(LanguageNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException("error.language.notfound"));
     }
 
     public void deleteLanguageById(UUID id) {

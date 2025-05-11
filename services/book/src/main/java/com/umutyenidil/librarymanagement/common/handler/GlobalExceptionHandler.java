@@ -7,8 +7,6 @@ import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
 import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
-import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
-import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import com.umutyenidil.librarymanagement.loan.BookCopyNotAvailableException;
 import com.umutyenidil.librarymanagement.loan.PatronHasUnpaidPenaltyException;
 import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
@@ -78,32 +76,12 @@ public class GlobalExceptionHandler {
                 .body(ValidationResponse.of(errors, messageUtil.getMessage(("error.common.validation"))));
     }
 
-    @ExceptionHandler(LanguageDuplicatonException.class)
-    public ResponseEntity<ErrorResponse> handleLanguageDuplicatonException(LanguageDuplicatonException ex) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(
-                        ErrorResponse.builder()
-                                .message(messageUtil.getMessage("error.language.duplicate"))
-                                .build()
-                );
-    }
-
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.builder()
                         .message(messageUtil.getMessage("error.common.parameter.invalid"))
-                        .build());
-    }
-
-    @ExceptionHandler(LanguageNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleLanguageNotFoundException(LanguageNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.language.notfound"))
                         .build());
     }
 
