@@ -7,7 +7,6 @@ import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
 import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
-import com.umutyenidil.librarymanagement.genre.GenreDuplicationException;
 import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
@@ -115,15 +114,6 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
                         .message(messageUtil.getMessage("error.author.notfound"))
-                        .build());
-    }
-
-    @ExceptionHandler(GenreDuplicationException.class)
-    public ResponseEntity<ErrorResponse> handleGenreDuplicationException(GenreDuplicationException ex) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.genre.duplicate"))
                         .build());
     }
 

@@ -17,7 +17,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    public UUID saveCategory(CategoryRequest request) {
+    public UUID saveCategory(CategoryCreateRequest request) {
 
         // ayni isimli bir kategori varsa hata firlat
         if (categoryRepository.existsByNameIgnoreCase(request.name()))

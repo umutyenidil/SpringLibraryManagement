@@ -1,27 +1,34 @@
 package com.umutyenidil.librarymanagement.genre;
 
+import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
+import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RestController
-@RequestMapping("/api/v1/genres")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/genres")
+@RestController
 public class GenreController {
 
     private final GenreService genreService;
+    private final MessageUtil messageUtil;
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
-    public ResponseEntity<UUID> saveGenre(
-            @RequestBody @Valid GenreRequest request
+    public ResponseEntity<SuccessResponse<UUID>> saveGenre(
+            @RequestBody @Valid GenreCreateRequest request
     ) {
-        return ResponseEntity.ok(genreService.saveGenre(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(SuccessResponse.of(genreService.saveGenre(request), messageUtil.getMessage("success.genre.create")));
     }
 
     @GetMapping("/{id}")

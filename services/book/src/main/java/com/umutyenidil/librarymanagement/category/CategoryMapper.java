@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CategoryMapper {
 
-    public Category toCategory(CategoryRequest request) {
+    public Category toCategory(CategoryCreateRequest request) {
         return Category.builder()
                 .name(request.name())
                 .build();

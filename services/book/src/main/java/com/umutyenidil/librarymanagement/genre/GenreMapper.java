@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GenreMapper {
 
-    public Genre toGenre(GenreRequest request) {
+    public Genre toGenre(GenreCreateRequest request) {
         return Genre.builder()
                 .name(request.name())
                 .build();

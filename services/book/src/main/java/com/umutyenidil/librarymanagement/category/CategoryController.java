@@ -7,7 +7,6 @@ import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
     public ResponseEntity<SuccessResponse<UUID>> saveCategory(
-            @RequestBody @Valid CategoryRequest request
+            @RequestBody @Valid CategoryCreateRequest request
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
