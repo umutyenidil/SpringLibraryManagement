@@ -36,10 +36,12 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorResponse> getAuthor(
+    public ResponseEntity<SuccessResponse<AuthorResponse>> findAuthorById(
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(authorService.findAuthorById(id));
+        return ResponseEntity.ok(SuccessResponse.of(
+                authorService.findAuthorById(id)
+        ));
     }
 
     @GetMapping
