@@ -86,14 +86,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-        log.info("you are here");
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(
-                        ErrorResponse.builder()
-                                .message("{error.auth.unauthorized}")
-                                .build()
-                );
+                .body(ErrorResponse.of(getMessage("error.common.auth.unauthorized")));
     }
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
