@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -34,5 +35,17 @@ public class AuthorService {
     public Page<Author> findAllAuthors(Pageable pageable) {
 
         return authorRepository.findAll(pageable);
+    }
+
+    public void deleteAuthorById(UUID id) {
+
+        // soft delete icin yazari kontrol et
+        authorRepository.findById(id)
+                .ifPresent( author-> {
+
+                    // deleted at degerini set et ve kaydet
+                    author.setDeletedAt(LocalDateTime.now());
+                    authorRepository.save(author);
+                });
     }
 }

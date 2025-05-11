@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.author;
 
+import com.umutyenidil.librarymanagement.common.dto.response.MessageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
@@ -59,5 +60,16 @@ public class AuthorController {
                                 .map(authorMapper::toAuthorResponse)
                 )
         );
+    }
+
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteAuthorById(
+            @PathVariable UUID id
+    ) {
+
+        authorService.deleteAuthorById(id);
+
+        return ResponseEntity.ok(MessageResponse.of(messageUtil.getMessage("success.author.delete")));
     }
 }
