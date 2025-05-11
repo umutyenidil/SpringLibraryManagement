@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.publisher;
 
+import com.umutyenidil.librarymanagement.common.dto.response.MessageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
@@ -58,12 +59,15 @@ public class PublisherController {
         );
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePublisherById(
+    public ResponseEntity<MessageResponse> deletePublisherById(
             @PathVariable UUID id
     ) {
         publisherService.deletePublisherById(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(MessageResponse.of(
+                messageUtil.getMessage("success.publisher.delete")
+        ));
     }
 }

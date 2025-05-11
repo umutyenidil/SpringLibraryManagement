@@ -44,8 +44,12 @@ public class PublisherService {
     }
 
     public void deletePublisherById(UUID id) {
+
+        // kayitli silinmemis bir yayin evi var mi diye kontrol et
         publisherRepository.findByIdAndDeletedAtIsNull(id)
                 .ifPresent(publisher -> {
+
+                    // deleted_at degerini guncelle ve kaydet
                     publisher.setDeletedAt(LocalDateTime.now());
                     publisherRepository.save(publisher);
                 });
