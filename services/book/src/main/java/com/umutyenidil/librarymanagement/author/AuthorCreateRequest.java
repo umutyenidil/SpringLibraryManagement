@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
-public record AuthorRequest(
+public record AuthorCreateRequest(
 
         @NotNull(message = "{error.author.validation.name}")
         String name,

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorMapper {
 
-    public Author toAuthor(AuthorRequest request) {
+    public Author toAuthor(AuthorCreateRequest request) {
         return Author.builder()
                 .name(request.name())
                 .surname(request.surname())

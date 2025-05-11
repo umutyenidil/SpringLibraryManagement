@@ -1,6 +1,5 @@
 package com.umutyenidil.librarymanagement.common.handler;
 
-import com.umutyenidil.librarymanagement.author.AuthorNotFoundException;
 import com.umutyenidil.librarymanagement.book.BookCopyNotFoundException;
 import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
@@ -82,15 +81,6 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.builder()
                         .message(messageUtil.getMessage("error.common.parameter.invalid"))
-                        .build());
-    }
-
-    @ExceptionHandler(AuthorNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleAuthorNotFoundException(AuthorNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.author.notfound"))
                         .build());
     }
 
