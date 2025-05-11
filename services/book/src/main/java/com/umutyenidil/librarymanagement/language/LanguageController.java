@@ -1,8 +1,10 @@
 package com.umutyenidil.librarymanagement.language;
 
+import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ public class LanguageController {
 
     private final LanguageService languageService;
     private final MessageUtil messageUtil;
+    private final LanguageMapper languageMapper;
 
     @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
@@ -35,11 +38,16 @@ public class LanguageController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<LanguageResponse>> findAllLanguages(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size
+    public ResponseEntity<PageResponse<LanguageResponse>> findAllLanguages(
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size
     ) {
-        return ResponseEntity.ok(languageService.findAllLanguages(PageRequest.of(page - 1, size)));
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        languageService.findAllLanguages(PageRequest.of(page - 1, size))
+                                .map(languageMapper::toLanguageResponse)
+                )
+        );
     }
 
     @GetMapping(path = "/{id}")

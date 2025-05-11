@@ -31,9 +31,8 @@ public class LanguageService {
         return savedLanguage.getId();
     }
 
-    public Page<LanguageResponse> findAllLanguages(Pageable pageable) {
-        return languageRepository.findAll(pageable)
-                .map(languageMapper::toLanguageResponse);
+    public Page<Language> findAllLanguages(Pageable pageable) {
+        return languageRepository.findAll(pageable);
     }
 
     public LanguageResponse findLanguageById(
