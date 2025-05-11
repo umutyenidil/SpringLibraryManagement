@@ -3,5 +3,3 @@ spring:
     name: book-service
   config:
     import: optional:configserver:http://localhost:8081
-  messages:
-    encoding: UTF-8

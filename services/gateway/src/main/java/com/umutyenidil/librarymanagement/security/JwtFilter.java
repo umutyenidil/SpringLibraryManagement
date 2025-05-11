@@ -44,7 +44,7 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
             return jwtClient.validateToken(token)
                     .flatMap(claims -> {
                         String userId = (String) claims.get("id");
-                        String userRole = (String) claims.get("id");
+                        String userRole = (String) claims.get("role");
 
                         ServerHttpRequest modifiedRequest = exchange.getRequest().mutate()
                                 .header("X-User-Id", userId)

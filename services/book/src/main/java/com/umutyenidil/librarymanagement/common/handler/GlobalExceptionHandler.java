@@ -1,27 +1,27 @@
-package com.umutyenidil.librarymanagement.handler;
+package com.umutyenidil.librarymanagement.common.handler;
 
 import com.umutyenidil.librarymanagement.author.AuthorNotFoundException;
 import com.umutyenidil.librarymanagement.book.BookCopyNotFoundException;
-import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.category.CategoryDuplicationException;
 import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
+import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
+import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
+import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
+import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import com.umutyenidil.librarymanagement.genre.GenreDuplicationException;
 import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
 import com.umutyenidil.librarymanagement.language.LanguageDuplicatonException;
 import com.umutyenidil.librarymanagement.language.LanguageNotFoundException;
 import com.umutyenidil.librarymanagement.loan.BookCopyNotAvailableException;
 import com.umutyenidil.librarymanagement.loan.PatronHasUnpaidPenaltyException;
-import com.umutyenidil.librarymanagement.publisher.Publisher;
 import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
 import com.umutyenidil.librarymanagement.publisher.PublisherNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,21 +35,31 @@ import java.util.HashMap;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private final MessageSource messageSource;
+    private final MessageUtil messageUtil;
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.common.auth.unauthorized"))));
+    }
+
+    @ExceptionHandler(ResourceDuplicationException.class)
+    public ResponseEntity<ErrorResponse> handleResourceDuplicationException(ResourceDuplicationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.of(messageUtil.getMessage((ex.getMessageCode()))));
+    }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ResponseEntity
-                .badRequest()
-                .body(
-                        ErrorResponse.builder()
-                                .message(messageSource.getMessage("error.body.missing", null, LocaleContextHolder.getLocale()))
-                                .build()
-                );
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.of(messageUtil.getMessage("error.body.missing")));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ValidationResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         var errors = new HashMap<String, String>();
 
         exception.getBindingResult().getAllErrors()
@@ -61,11 +71,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(
-                        ErrorResponse.builder()
-                                .messages(errors)
-                                .build()
-                );
+                .body(ValidationResponse.of(errors, messageUtil.getMessage(("error.common.validation"))));
     }
 
     @ExceptionHandler(LanguageDuplicatonException.class)
@@ -74,7 +80,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(
                         ErrorResponse.builder()
-                                .message(messageSource.getMessage("error.language.duplicate", null, LocaleContextHolder.getLocale()))
+                                .message(messageUtil.getMessage("error.language.duplicate"))
                                 .build()
                 );
     }
@@ -84,7 +90,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.common.parameter.invalid", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.common.parameter.invalid"))
                         .build());
     }
 
@@ -93,7 +99,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.language.notfound", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.language.notfound"))
                         .build());
     }
 
@@ -102,7 +108,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.author.notfound", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.author.notfound"))
                         .build());
     }
 
@@ -111,7 +117,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.category.duplicate", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.category.duplication"))
                         .build());
     }
 
@@ -120,7 +126,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.category.notfound", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.category.notfound"))
                         .build());
     }
 
@@ -130,7 +136,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.genre.duplicate", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.genre.duplicate"))
                         .build());
     }
 
@@ -139,7 +145,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.genre.notfound", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.genre.notfound"))
                         .build());
     }
 
@@ -148,7 +154,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.publisher.duplicate", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.publisher.duplicate"))
                         .build());
     }
 
@@ -157,7 +163,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.publisher.notfound", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.publisher.notfound"))
                         .build());
     }
 
@@ -167,7 +173,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.builder()
-                        .message(messageSource.getMessage("error.common.internalserver", null, LocaleContextHolder.getLocale()))
+                        .message(messageUtil.getMessage("error.common.internalserver"))
                         .build());
     }
 
