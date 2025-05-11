@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.genre;
 
+import com.umutyenidil.librarymanagement.common.dto.response.MessageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
@@ -55,12 +56,15 @@ public class GenreController {
         );
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteGenreById(
             @PathVariable UUID id
     ) {
         genreService.deleteGenreById(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(
+                MessageResponse.of(messageUtil.getMessage("success.genre.delete"))
+        );
     }
 }

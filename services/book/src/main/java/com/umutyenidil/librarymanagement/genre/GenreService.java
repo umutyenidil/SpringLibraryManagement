@@ -46,8 +46,12 @@ public class GenreService {
     }
 
     public void deleteGenreById(UUID id) {
+
+        // soft delete icin turu kontrol et
         genreRepository.findByIdAndDeletedAtIsNull(id)
                 .ifPresent(genre -> {
+
+                    // turun deleted_at degerini guncelle ve kaydet
                     genre.setDeletedAt(LocalDateTime.now());
                     genreRepository.save(genre);
                 });
