@@ -6,7 +6,6 @@ import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,10 +37,12 @@ public class PublisherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PublisherResponse> findPublisherId(
+    public ResponseEntity<SuccessResponse<PublisherResponse>> findPublisherId(
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(publisherService.findPublisherId(id));
+        return ResponseEntity.ok(SuccessResponse.of(
+                publisherService.findPublisherId(id)
+        ));
     }
 
     @GetMapping
