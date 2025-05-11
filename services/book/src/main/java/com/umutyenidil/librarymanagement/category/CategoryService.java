@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.category;
 
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,8 @@ public class CategoryService {
     public UUID saveCategory(CategoryRequest request) {
 
         // ayni isimli bir kategori varsa hata firlat
-        if (categoryRepository.existsByNameIgnoreCase(request.name())) throw new ResourceDuplicationException("error.category.duplicate");
+        if (categoryRepository.existsByNameIgnoreCase(request.name()))
+            throw new ResourceDuplicationException("error.category.duplicate");
 
         // request dto'dan entity'e donusum yap
         var category = categoryMapper.toCategory(request);
@@ -32,9 +34,10 @@ public class CategoryService {
     }
 
     public CategoryResponse findCategoryById(UUID id) {
+
         return categoryRepository.findByIdAndDeletedAtIsNull(id)
                 .map(categoryMapper::toCategoryResponse)
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException("error.category.notfound"));
     }
 
     public Page<Category> findAllCategories(Pageable pageable) {

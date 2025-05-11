@@ -7,6 +7,7 @@ import com.umutyenidil.librarymanagement.category.CategoryNotFoundException;
 import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import com.umutyenidil.librarymanagement.genre.GenreDuplicationException;
 import com.umutyenidil.librarymanagement.genre.GenreNotFoundException;
@@ -48,6 +49,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceDuplicationException(ResourceDuplicationException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(ErrorResponse.of(messageUtil.getMessage((ex.getMessageCode()))));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.of(messageUtil.getMessage((ex.getMessageCode()))));
     }
 

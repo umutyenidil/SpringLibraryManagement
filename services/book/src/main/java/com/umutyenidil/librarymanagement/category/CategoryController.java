@@ -35,10 +35,12 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> findCategoryById(
+    public ResponseEntity<SuccessResponse<CategoryResponse>> findCategoryById(
             @PathVariable UUID id
     ) {
-        return ResponseEntity.ok(categoryService.findCategoryById(id));
+        return ResponseEntity.ok(
+                SuccessResponse.of(categoryService.findCategoryById(id))
+        );
     }
 
     @GetMapping
