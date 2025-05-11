@@ -48,7 +48,7 @@ public class Book {
     private Audience audience;
 
     @ManyToOne
-    @JoinColumn(name = "language_id", nullable = false)
+    @JoinColumn(name = "language_id", foreignKey = @ForeignKey(name = "fkgcee4gd2csaf93meptle3s6uu"))
     private Language language;
 
     @Column(nullable = false)

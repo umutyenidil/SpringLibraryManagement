@@ -114,21 +114,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        log.error(ex.getMessage(), ex);
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.common.internalserver"))
-                        .build());
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorResponse.of(messageUtil.getMessage("error.common.internalserver")));
     }
 
     @ExceptionHandler(PatronHasUnpaidPenaltyException.class)
     public ResponseEntity<ErrorResponse> handlePatronHasUnpaidPenaltyException(PatronHasUnpaidPenaltyException ex) {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
-                .body(ErrorResponse.builder()
-                        .message("Kullanıcının ödenmemiş cezası bulunuyor")
-                        .build());
+                .body(
+                        ErrorResponse.builder()
+                                .message("Kullanıcının ödenmemiş cezası bulunuyor")
+                                .build()
+                );
     }
 
     @ExceptionHandler(BookCopyNotFoundException.class)

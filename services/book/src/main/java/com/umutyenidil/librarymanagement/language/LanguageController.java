@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.language;
 
+import com.umutyenidil.librarymanagement.common.dto.response.MessageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
@@ -59,13 +60,17 @@ public class LanguageController {
         );
     }
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteLanguageById(
+    public ResponseEntity<MessageResponse> deleteLanguageById(
             @PathVariable UUID id
     ) {
         languageService.deleteLanguageById(id);
 
-        return ResponseEntity.noContent()
-                .build();
+        return ResponseEntity.ok(
+                MessageResponse.of(
+                        messageUtil.getMessage("success.language.delete")
+                )
+        );
     }
 }
