@@ -8,8 +8,6 @@ import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundExcept
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import com.umutyenidil.librarymanagement.loan.BookCopyNotAvailableException;
 import com.umutyenidil.librarymanagement.loan.PatronHasUnpaidPenaltyException;
-import com.umutyenidil.librarymanagement.publisher.PublisherDuplicationException;
-import com.umutyenidil.librarymanagement.publisher.PublisherNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -81,24 +79,6 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.builder()
                         .message(messageUtil.getMessage("error.common.parameter.invalid"))
-                        .build());
-    }
-
-    @ExceptionHandler(PublisherDuplicationException.class)
-    public ResponseEntity<ErrorResponse> handlePublisherDuplicationException(PublisherDuplicationException ex) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.publisher.duplicate"))
-                        .build());
-    }
-
-    @ExceptionHandler(PublisherNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePublisherNotFoundException(PublisherNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.publisher.notfound"))
                         .build());
     }
 

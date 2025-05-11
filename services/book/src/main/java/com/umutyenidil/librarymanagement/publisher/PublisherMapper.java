@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PublisherMapper {
 
-    public Publisher toPublisher(PublisherRequest request) {
+    public Publisher toPublisher(PublisherCreateRequest request) {
         return Publisher.builder()
                 .name(request.name())
                 .build();

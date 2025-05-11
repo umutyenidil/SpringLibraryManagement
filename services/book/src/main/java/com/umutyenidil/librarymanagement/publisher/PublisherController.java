@@ -1,26 +1,37 @@
 package com.umutyenidil.librarymanagement.publisher;
 
+import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
+import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RestController
-@RequestMapping("api/v1/publishers")
 @RequiredArgsConstructor
+@RequestMapping("api/v1/publishers")
+@RestController
 public class PublisherController {
 
     private final PublisherService publisherService;
+    private final MessageUtil messageUtil;
 
+    @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
-    public ResponseEntity<UUID> savePublisher(
-            @RequestBody @Valid PublisherRequest request
+    public ResponseEntity<SuccessResponse<UUID>> savePublisher(
+            @RequestBody @Valid PublisherCreateRequest request
     ) {
-        return ResponseEntity.ok(publisherService.savePublisher(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(SuccessResponse.of(
+                        publisherService.savePublisher(request),
+                        messageUtil.getMessage("success.publisher.create")
+                ));
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,5 @@
 package com.umutyenidil.librarymanagement.publisher;
 
-import com.umutyenidil.librarymanagement._core.entity.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

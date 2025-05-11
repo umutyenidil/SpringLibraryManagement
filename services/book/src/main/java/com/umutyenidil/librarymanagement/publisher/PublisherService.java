@@ -1,5 +1,7 @@
 package com.umutyenidil.librarymanagement.publisher;
 
+import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,20 +17,26 @@ public class PublisherService {
     private final PublisherRepository publisherRepository;
     private final PublisherMapper publisherMapper;
 
-    public UUID savePublisher(PublisherRequest request) {
-        if(publisherRepository.existsByNameIgnoreCase(request.name())) throw new PublisherDuplicationException();
+    public UUID savePublisher(PublisherCreateRequest request) {
 
+        // ayni isimli bir yayin evi varsa hata firlat
+        if (publisherRepository.existsByNameIgnoreCase(request.name()))
+            throw new ResourceDuplicationException("error.publisher.duplicate");
+
+        // yayin evi create requesti entity'e donustur
         var publisher = publisherMapper.toPublisher(request);
 
+        // yayin evini veritabanina kaydet
         publisherRepository.save(publisher);
 
+        // kaydedilen yayin evinin id degerini dondur
         return publisher.getId();
     }
 
     public PublisherResponse findPublisherId(UUID id) {
         return publisherRepository.findByIdAndDeletedAtIsNull(id)
                 .map(publisherMapper::toPublisherResponse)
-                .orElseThrow(PublisherNotFoundException::new);
+                .orElseThrow(() -> new ResourceNotFoundException("error.publisher.notfound"));
     }
 
     public Page<PublisherResponse> findAllPublishers(Pageable pageable) {
