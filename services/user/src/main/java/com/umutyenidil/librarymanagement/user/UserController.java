@@ -50,4 +50,15 @@ public class UserController {
 
         return ResponseEntity.ok(MessageResponse.of(messageUtil.getMessage("success.patron.update")));
     }
+
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    @DeleteMapping("/{user-id}")
+    public ResponseEntity<MessageResponse> deletePatronUser(
+            @PathVariable("user-id") UUID userId
+    ) {
+
+        userService.deletePatronUser(userId);
+
+        return ResponseEntity.ok(MessageResponse.of(messageUtil.getMessage("success.patron.delete")));
+    }
 }

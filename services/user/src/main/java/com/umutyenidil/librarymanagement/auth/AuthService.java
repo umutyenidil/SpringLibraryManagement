@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class AuthService {
     private final AuthMapper authMapper;
     private final UserService userService;
 
+    @Transactional
     public UUID registerPatron(RegisterRequest request) {
 
         // eger e-posta daha once kullanilmissa hata firlat
@@ -57,6 +59,7 @@ public class AuthService {
         return savedAuth.getId();
     }
 
+    @Transactional
     public UUID registerLibrarian(RegisterRequest request) {
 
         // eger e-posta daha once kullanilmissa hata firlat

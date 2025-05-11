@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -51,5 +52,12 @@ public class UserService {
             user.setFullAddress(request.fullAddress());
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void deletePatronUser(UUID patronId) {
+
+        userRepository.deleteById(patronId);
+        authRepository.deleteById(patronId);
     }
 }

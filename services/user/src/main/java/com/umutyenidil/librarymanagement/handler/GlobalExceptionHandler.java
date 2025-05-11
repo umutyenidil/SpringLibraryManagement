@@ -74,11 +74,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(
-                        ErrorResponse.builder()
-                                .message("{error.auth.badcredentials}")
-                                .build()
-                );
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.auth.badcredentials"))));
     }
 
     @ExceptionHandler(AuthorizationDeniedException.class)
