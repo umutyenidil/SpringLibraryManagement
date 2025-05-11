@@ -37,9 +37,9 @@ public class CategoryService {
                 .orElseThrow(CategoryNotFoundException::new);
     }
 
-    public Page<CategoryResponse> findAllCategories(Pageable pageable) {
-        return categoryRepository.findAllByDeletedAtIsNull(pageable)
-                .map(categoryMapper::toCategoryResponse);
+    public Page<Category> findAllCategories(Pageable pageable) {
+
+        return categoryRepository.findAllByDeletedAtIsNull(pageable);
     }
 
     public void deleteCategoryById(UUID id) {

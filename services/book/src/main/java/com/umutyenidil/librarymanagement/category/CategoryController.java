@@ -1,8 +1,10 @@
 package com.umutyenidil.librarymanagement.category;
 
+import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
     private final MessageUtil messageUtil;
 
     @PreAuthorize("hasRole('LIBRARIAN')")
@@ -39,11 +42,16 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryResponse>> findAllCategories(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size
+    public ResponseEntity<PageResponse<CategoryResponse>> findAllCategories(
+            @RequestParam(defaultValue = "1") @Positive int page,
+            @RequestParam(defaultValue = "20") @Positive int size
     ) {
-        return ResponseEntity.ok(categoryService.findAllCategories(PageRequest.of(page - 1, size)));
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        categoryService.findAllCategories(PageRequest.of(page - 1, size))
+                                .map(categoryMapper::toCategoryResponse)
+                )
+        );
     }
 
     @DeleteMapping("/{id}")
