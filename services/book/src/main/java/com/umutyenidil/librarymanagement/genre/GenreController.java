@@ -1,8 +1,10 @@
 package com.umutyenidil.librarymanagement.genre;
 
+import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ public class GenreController {
 
     private final GenreService genreService;
     private final MessageUtil messageUtil;
+    private final GenreMapper genreMapper;
 
     @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
@@ -39,11 +42,16 @@ public class GenreController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<GenreResponse>> findAllGenres(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size
+    public ResponseEntity<PageResponse<GenreResponse>> findAllGenres(
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size
     ) {
-        return ResponseEntity.ok(genreService.findAllGenres(PageRequest.of(page - 1, size)));
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        genreService.findAllGenres(PageRequest.of(page - 1, size))
+                                .map(genreMapper::toGenreResponse)
+                )
+        );
     }
 
     @DeleteMapping("/{id}")

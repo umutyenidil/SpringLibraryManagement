@@ -37,9 +37,9 @@ public class GenreService {
                 .orElseThrow(GenreNotFoundException::new);
     }
 
-    public Page<GenreResponse> findAllGenres(Pageable pageable) {
-        return genreRepository.findAllByDeletedAtIsNull(pageable)
-                .map(genreMapper::toGenreResponse);
+    public Page<Genre> findAllGenres(Pageable pageable) {
+
+        return genreRepository.findAllByDeletedAtIsNull(pageable);
     }
 
     public void deleteGenreById(UUID id) {

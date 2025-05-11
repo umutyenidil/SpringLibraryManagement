@@ -45,8 +45,8 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<PageResponse<CategoryResponse>> findAllCategories(
-            @RequestParam(defaultValue = "1") @Positive int page,
-            @RequestParam(defaultValue = "20") @Positive int size
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size
     ) {
         return ResponseEntity.ok(
                 PageResponse.fromPage(
