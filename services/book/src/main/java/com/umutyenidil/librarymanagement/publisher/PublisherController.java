@@ -1,8 +1,10 @@
 package com.umutyenidil.librarymanagement.publisher;
 
+import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,7 @@ public class PublisherController {
 
     private final PublisherService publisherService;
     private final MessageUtil messageUtil;
+    private final PublisherMapper publisherMapper;
 
     @PreAuthorize("hasRole('LIBRARIAN')")
     @PostMapping
@@ -42,11 +45,16 @@ public class PublisherController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PublisherResponse>> findAllPublishers(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size
+    public ResponseEntity<PageResponse<PublisherResponse>> findAllPublishers(
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size
     ) {
-        return ResponseEntity.ok(publisherService.findAllPublishers(PageRequest.of(page - 1, size)));
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        publisherService.findAllPublishers(PageRequest.of(page - 1, size))
+                                .map(publisherMapper::toPublisherResponse)
+                )
+        );
     }
 
     @DeleteMapping("/{id}")

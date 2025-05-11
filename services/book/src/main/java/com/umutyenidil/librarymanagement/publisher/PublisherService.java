@@ -39,9 +39,8 @@ public class PublisherService {
                 .orElseThrow(() -> new ResourceNotFoundException("error.publisher.notfound"));
     }
 
-    public Page<PublisherResponse> findAllPublishers(Pageable pageable) {
-        return publisherRepository.findAllByDeletedAtIsNull(pageable)
-                .map(publisherMapper::toPublisherResponse);
+    public Page<Publisher> findAllPublishers(Pageable pageable) {
+        return publisherRepository.findAllByDeletedAtIsNull(pageable);
     }
 
     public void deletePublisherById(UUID id) {
