@@ -5,6 +5,8 @@ import com.umutyenidil.librarymanagement.auth.EmailAlreadyExistsException;
 import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -96,6 +98,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.of(messageUtil.getMessage(("error.common.noresourcefound"))));
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    public ResponseEntity<ErrorResponse> handleMalformedJwtException(MalformedJwtException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.jwt.malformed"))));
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponse> handleJwtException(JwtException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.jwt.invalid"))));
     }
 }
 
