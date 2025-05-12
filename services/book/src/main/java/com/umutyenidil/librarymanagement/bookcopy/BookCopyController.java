@@ -34,4 +34,19 @@ public class BookCopyController {
                         messageUtil.getMessage("success.bookcopy.batch.create")
                 ));
     }
+
+    @GetMapping("/barcode/{barcode}/available")
+    public ResponseEntity<SuccessResponse<Boolean>> isBookCopyAvailable(
+            @PathVariable String barcode
+    ) {
+
+        var available = bookCopyService.isBookCopyAvailableByBarcode(barcode);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.of(
+                        available,
+                        messageUtil.getMessage(available ? "success.bookcopy.availability.true" : "success.bookcopy.availability.false")
+                ));
+    }
 }

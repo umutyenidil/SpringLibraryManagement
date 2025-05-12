@@ -2,6 +2,7 @@ package com.umutyenidil.librarymanagement.bookcopy;
 
 import com.umutyenidil.librarymanagement.book.BookService;
 import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
+import com.umutyenidil.librarymanagement.loan.LoanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ public class BookCopyService {
     private final BookCopyRepository bookCopyRepository;
     private final BookService bookService;
     private final BookCopyMapper bookCopyMapper;
+    private final LoanRepository loanRepository;
 
     @Transactional
     public List<UUID> saveBookCopies(MultiBookCopyCreateRequest request) {
@@ -46,5 +48,15 @@ public class BookCopyService {
     public BookCopy findBookCopyById(UUID id) {
         return bookCopyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("error.book.notfound"));
+    }
+
+    public Boolean isBookCopyAvailableByBarcode(String barcode) {
+
+        BookCopy bookCopy = bookCopyRepository.findByBarcode(barcode)
+                .orElseThrow(() -> new ResourceNotFoundException("error.bookcopy.notfound"));
+
+        boolean isOnLoan = loanRepository.existsByBookCopyAndReturnedAtIsNull(bookCopy);
+
+        return !isOnLoan;
     }
 }

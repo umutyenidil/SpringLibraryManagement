@@ -3,8 +3,6 @@ package com.umutyenidil.librarymanagement.bookcopy;
 import com.umutyenidil.librarymanagement.book.Book;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class BookCopyMapper {
 
