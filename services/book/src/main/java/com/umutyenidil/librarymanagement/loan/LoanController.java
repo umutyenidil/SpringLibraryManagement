@@ -1,9 +1,13 @@
 package com.umutyenidil.librarymanagement.loan;
 
 import com.umutyenidil.librarymanagement.book.Book;
+import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
+import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -14,18 +18,19 @@ import java.util.UUID;
 public class LoanController {
 
     private final LoanService loanService;
+    private final MessageUtil messageUtil;
 
+    @PreAuthorize("hasRole('PATRON')")
     @PostMapping
-    public ResponseEntity<UUID> saveLoan(
+    public ResponseEntity<SuccessResponse<UUID>> saveLoan(
             @RequestHeader("X-User-Id") UUID userId,
             @RequestBody @Valid LoanCreateRequest request
     ) {
-        var extendedRequest = LoanCreateRequest.builder()
-                .bookCopyId(request.bookCopyId())
-                .patronId(userId.toString())
-                .build();
-
         return ResponseEntity
-                .ok(loanService.saveLoan(extendedRequest));
+                .status(HttpStatus.CREATED)
+                .body(SuccessResponse.of(
+                        loanService.saveLoan(userId, request),
+                        messageUtil.getMessage("success.loan.create")
+                ));
     }
 }

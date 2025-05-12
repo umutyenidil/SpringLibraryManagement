@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.loan;
 
+import com.umutyenidil.librarymanagement.bookcopy.BookCopy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +28,6 @@ public interface LoanRepository extends JpaRepository<Loan, UUID> {
     AND l.returnedAt IS NULL
     """)
     boolean existsActiveLoanByBookCopyId(@Param("bookCopyId") UUID bookCopyId);
+
+    boolean existsByBookCopyAndReturnedAtIsNull(BookCopy bookCopy);
 }

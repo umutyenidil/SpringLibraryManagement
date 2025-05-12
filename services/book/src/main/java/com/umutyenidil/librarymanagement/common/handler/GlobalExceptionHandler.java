@@ -2,12 +2,8 @@ package com.umutyenidil.librarymanagement.common.handler;
 
 import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
-import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
-import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
-import com.umutyenidil.librarymanagement.common.exception.ValidationFieldException;
+import com.umutyenidil.librarymanagement.common.exception.*;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
-import com.umutyenidil.librarymanagement.loan.BookCopyNotAvailableException;
-import com.umutyenidil.librarymanagement.loan.PatronHasUnpaidPenaltyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -105,23 +102,27 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(messageUtil.getMessage("error.common.internalserver")));
     }
 
-    @ExceptionHandler(PatronHasUnpaidPenaltyException.class)
-    public ResponseEntity<ErrorResponse> handlePatronHasUnpaidPenaltyException(PatronHasUnpaidPenaltyException ex) {
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex) {
+
         return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body(
-                        ErrorResponse.builder()
-                                .message("Kullanıcının ödenmemiş cezası bulunuyor")
-                                .build()
-                );
+                .status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                .body(ErrorResponse.of(messageUtil.getMessage("error.common.unsupportedmediatype")));
     }
 
-    @ExceptionHandler(BookCopyNotAvailableException.class)
-    public ResponseEntity<ErrorResponse> handleBookCopyNotAvailableException(BookCopyNotAvailableException ex) {
+    @ExceptionHandler(BusinessRuleViolationException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessRuleViolationException(BusinessRuleViolationException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.of(messageUtil.getMessage(ex.getMessageCode())));
+    }
+
+    @ExceptionHandler(ResourceUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleResourceUnavailableException(ResourceUnavailableException ex) {
+
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(ErrorResponse.builder()
-                        .message("Kitap örneği baskasi tarafindan odunc alinmis")
-                        .build());
+                .body(ErrorResponse.of(messageUtil.getMessage(ex.getMessageCode())));
     }
 }

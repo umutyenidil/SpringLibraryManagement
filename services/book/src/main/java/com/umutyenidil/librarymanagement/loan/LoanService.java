@@ -1,6 +1,8 @@
 package com.umutyenidil.librarymanagement.loan;
 
 import com.umutyenidil.librarymanagement.bookcopy.BookCopyService;
+import com.umutyenidil.librarymanagement.common.exception.BusinessRuleViolationException;
+import com.umutyenidil.librarymanagement.common.exception.ResourceUnavailableException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,34 +22,37 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final BookCopyService bookCopyService;
 
-    public UUID saveLoan(LoanCreateRequest request) {
+    public UUID saveLoan(UUID patronId, LoanCreateRequest request) {
 
-        var patronId = UUID.fromString(request.patronId());
-
+        // kullanicinin cezasi var mi diye kontrol et
         var patronHasUnpaidLoanPenalty =  loanPenaltyRepository.existsUnpaidPenaltyByPatronId(patronId);
 
-        log.info("patron unpaid loan penalty status: {}", patronHasUnpaidLoanPenalty);
+        // cezasi vars ahata firlat
+        if(patronHasUnpaidLoanPenalty) throw new BusinessRuleViolationException("error.patron.penalty.unpaid");
 
-        if(patronHasUnpaidLoanPenalty) throw new PatronHasUnpaidPenaltyException("patron has unpaid loan penalty");
+        // kitap kopyasini bulmaya calis, yoksa hata firlat
+        var bookCopy = bookCopyService.findBookCopyByBarcode(request.bookCopyBarcode());
 
-        var bookCopy = bookCopyService.findBookCopyById(UUID.fromString(request.bookCopyId()));
+        // kitap kopyasi su an baskasi tarafindan odunc alinmis olarak mi gorunuyor kontrol et
+        var existsActiveLoanByBookCopy = loanRepository.existsActiveLoanByBookCopyId(bookCopy.getId());
 
-        var existsActiveLoanByBookCopy = loanRepository.existsActiveLoanByBookCopyId(UUID.fromString(request.bookCopyId()));
+        // kitap baskasi tarafindan alinmis gorunuyor ise hata firlat
+        if(existsActiveLoanByBookCopy) throw new ResourceUnavailableException("error.bookcopy.notavailable");
 
-        if(existsActiveLoanByBookCopy) throw new BookCopyNotAvailableException("");
-
+        // odunc alma ve son teslim tarihini olustur
         var borrowedAt = LocalDateTime.now();
         var dueAt = borrowedAt.plusDays(7).with(LocalTime.of(23, 59));
 
+        // odunc alma operasyonunu veritabanina kaydet
         var loan = Loan.builder()
                 .patronId(patronId)
                 .bookCopy(bookCopy)
                 .borrowedAt(borrowedAt)
                 .dueAt(dueAt)
                 .build();
-
         var savedLoan = loanRepository.save(loan);
 
+        // odunc alma id'sini dondur
         return savedLoan.getId();
     }
 

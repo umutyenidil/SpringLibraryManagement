@@ -59,4 +59,10 @@ public class BookCopyService {
 
         return !isOnLoan;
     }
+
+    public BookCopy findBookCopyByBarcode(String barcode) {
+
+        return bookCopyRepository.findByBarcode(barcode)
+                .orElseThrow(() -> new ResourceNotFoundException("error.book.notfound"));
+    }
 }
