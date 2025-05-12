@@ -60,13 +60,13 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponse> findBookById(
+    public ResponseEntity<SuccessResponse<BookResponse>> findBookById(
             @PathVariable UUID id
     ) {
-        var book = bookService.findBookById(id);
 
-        return ResponseEntity
-                .ok(bookMapper.toBookResponse(book));
+        return ResponseEntity.ok(SuccessResponse.of(
+                bookMapper.toBookResponse(bookService.findBookById(id))
+        ));
     }
 
     @GetMapping
