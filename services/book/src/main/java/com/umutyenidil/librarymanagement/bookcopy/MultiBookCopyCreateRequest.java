@@ -1,14 +1,17 @@
-package com.umutyenidil.librarymanagement.book;
+package com.umutyenidil.librarymanagement.bookcopy;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.UUID;
 
-@Validated
 public record MultiBookCopyCreateRequest(
+
+        @NotNull(message = "{validation.bookcopy.bookid.notnull}")
+        UUID bookId,
+
         @Size(min = 1, message = "{error.book.copies.size}")
         @NotNull(message = "{error.book.copies.notnull}")
         List<@Valid BookCopyCreateRequest> bookCopies

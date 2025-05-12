@@ -1,5 +1,6 @@
-package com.umutyenidil.librarymanagement.book;
+package com.umutyenidil.librarymanagement.bookcopy;
 
+import com.umutyenidil.librarymanagement.book.Book;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -7,16 +8,14 @@ import java.util.UUID;
 @Service
 public class BookCopyMapper {
 
-    public BookCopy toBookCopy(UUID bookId, BookCopyCreateRequest request) {
+    public BookCopy toBookCopy(BookCopyCreateRequest request) {
         return BookCopy.builder()
                 .book(
                         Book.builder()
-                                .id(bookId)
                                 .build()
                 )
                 .acquisitionType(request.acquisitionType())
                 .condition(request.condition())
-                .status(request.status())
                 .build();
     }
 
@@ -25,7 +24,6 @@ public class BookCopyMapper {
                 .barcode(bookCopy.getBarcode())
                 .acquisitionType(bookCopy.getAcquisitionType())
                 .condition(bookCopy.getCondition())
-                .status(bookCopy.getStatus())
                 .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.umutyenidil.librarymanagement.book;
 
 import com.umutyenidil.librarymanagement.author.AuthorResponse;
+import com.umutyenidil.librarymanagement.bookcopy.BookCopyResponse;
 import com.umutyenidil.librarymanagement.category.CategoryResponse;
 import com.umutyenidil.librarymanagement.genre.GenreResponse;
 import com.umutyenidil.librarymanagement.language.LanguageResponse;

@@ -1,7 +1,8 @@
-package com.umutyenidil.librarymanagement.book;
+package com.umutyenidil.librarymanagement.bookcopy;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.umutyenidil.librarymanagement.book.Book;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,14 +17,16 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@Entity
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "book_copies")
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class BookCopy {
+
     @Id
     @GeneratedValue
     UUID id;
 
+    @Column(nullable = false)
     private String barcode;
 
     @ManyToOne
@@ -39,9 +42,15 @@ public class BookCopy {
     @Column(nullable = false)
     private Condition condition;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    private LocalDateTime deletedAt;
 
     public enum AcquisitionType {
         PURCHASED,
@@ -72,31 +81,6 @@ public class BookCopy {
             return null;
         }
     }
-
-    public enum Status {
-        AVAILABLE,
-        BORROWED;
-
-        @JsonCreator
-        public static Status fromString(String value) {
-            for (Status status : values()) {
-                if (status.name().equalsIgnoreCase(value)) {
-                    return status;
-                }
-            }
-            return null;
-        }
-    }
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    private LocalDateTime deletedAt;
 
     @PrePersist
     public void prePersist() {

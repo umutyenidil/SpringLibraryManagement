@@ -1,4 +1,4 @@
-package com.umutyenidil.librarymanagement.book;
+package com.umutyenidil.librarymanagement.bookcopy;
 
 import com.umutyenidil.librarymanagement._core.repository.SoftDeletableJpaRepository;
 import org.springframework.stereotype.Repository;

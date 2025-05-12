@@ -1,14 +1,10 @@
 package com.umutyenidil.librarymanagement.loan;
 
-import com.umutyenidil.librarymanagement.book.Book;
-import com.umutyenidil.librarymanagement.book.BookCopyService;
-import com.umutyenidil.librarymanagement.book.BookRepository;
-import com.umutyenidil.librarymanagement.book.BookService;
+import com.umutyenidil.librarymanagement.bookcopy.BookCopyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

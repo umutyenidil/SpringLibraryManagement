@@ -3,6 +3,7 @@ package com.umutyenidil.librarymanagement.book;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.umutyenidil.librarymanagement.author.Author;
+import com.umutyenidil.librarymanagement.bookcopy.BookCopy;
 import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.genre.Genre;
 import com.umutyenidil.librarymanagement.language.Language;

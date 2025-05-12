@@ -1,0 +1,50 @@
+package com.umutyenidil.librarymanagement.bookcopy;
+
+import com.umutyenidil.librarymanagement.book.BookService;
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class BookCopyService {
+
+    private final BookCopyRepository bookCopyRepository;
+    private final BookService bookService;
+    private final BookCopyMapper bookCopyMapper;
+
+    @Transactional
+    public List<UUID> saveBookCopies(MultiBookCopyCreateRequest request) {
+
+        // kopyalari eklenecek kitap var mi diye kontrol et, yoksa hata firlat
+        var book = bookService.findBookById(request.bookId());
+
+
+        // kitap kopyalarina ana kitabi ekle
+        var copies = request.bookCopies()
+                .stream()
+                .map(bookCopyRequest -> {
+                    BookCopy bookCopy = bookCopyMapper.toBookCopy(bookCopyRequest);
+                    bookCopy.setBook(book);
+                    return bookCopy;
+                })
+                .toList();
+
+        // kitap kopyalarini veritabanina kaydet
+        var savedCopies = bookCopyRepository.saveAll(copies);
+
+        // kaydedilen kitap kopyalarinin id'lerini dondur
+        return savedCopies.stream()
+                .map(BookCopy::getId)
+                .toList();
+    }
+
+    public BookCopy findBookCopyById(UUID id) {
+        return bookCopyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("error.book.notfound"));
+    }
+}

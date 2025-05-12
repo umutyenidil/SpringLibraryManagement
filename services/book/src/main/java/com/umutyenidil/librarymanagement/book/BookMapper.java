@@ -2,6 +2,7 @@ package com.umutyenidil.librarymanagement.book;
 
 import com.umutyenidil.librarymanagement.author.Author;
 import com.umutyenidil.librarymanagement.author.AuthorMapper;
+import com.umutyenidil.librarymanagement.bookcopy.BookCopyMapper;
 import com.umutyenidil.librarymanagement.category.Category;
 import com.umutyenidil.librarymanagement.category.CategoryMapper;
 import com.umutyenidil.librarymanagement.genre.Genre;
