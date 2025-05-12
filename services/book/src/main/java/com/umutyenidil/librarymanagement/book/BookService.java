@@ -158,12 +158,12 @@ public class BookService {
     }
 
     public Book findBookById(UUID id) {
-        return bookRepository.findByIdAndDeletedAtIsNull(id)
+        return bookRepository.findByIdAndDeletedAtIsNull((id))
                 .orElseThrow(() -> new ResourceNotFoundException("error.book.notfound"));
     }
 
     public Page<Book> findAllBooks(Pageable pageable) {
-        return bookRepository.findAllByDeletedAtIsNull(pageable);
+        return bookRepository.findAllByDeletedAtIsNull((pageable));
     }
 
     public Page<Book> searchBooks(BookSearchRequest request, Pageable pageable) {

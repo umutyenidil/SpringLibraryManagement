@@ -1,6 +1,6 @@
 package com.umutyenidil.librarymanagement.loan;
 
-import com.umutyenidil.librarymanagement._core.repository.SoftDeletableJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface LoanRepository extends SoftDeletableJpaRepository<Loan, UUID> {
+public interface LoanRepository extends JpaRepository<Loan, UUID> {
 
     @Query("""
             SELECT l.id FROM Loan l

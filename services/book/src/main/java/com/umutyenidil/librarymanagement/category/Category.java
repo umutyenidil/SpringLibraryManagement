@@ -1,7 +1,6 @@
 package com.umutyenidil.librarymanagement.category;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.umutyenidil.librarymanagement._core.entity.SoftDeletableEntity;
 import com.umutyenidil.librarymanagement.book.Book;
 import jakarta.persistence.*;
 import lombok.*;
