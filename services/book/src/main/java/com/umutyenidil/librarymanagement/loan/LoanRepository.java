@@ -1,6 +1,8 @@
 package com.umutyenidil.librarymanagement.loan;
 
 import com.umutyenidil.librarymanagement.bookcopy.BookCopy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,4 +35,6 @@ public interface LoanRepository extends JpaRepository<Loan, UUID> {
     boolean existsByBookCopyAndReturnedAtIsNull(BookCopy bookCopy);
 
     Optional<Loan> findByBookCopyAndPatronIdAndReturnedAtIsNull(BookCopy bookCopy, UUID patronId);
+
+    Page<Loan> findAllByDeletedAtIsNull(Pageable pageable);
 }

@@ -5,9 +5,13 @@ import com.umutyenidil.librarymanagement.common.exception.BusinessRuleViolationE
 import com.umutyenidil.librarymanagement.common.exception.ResourceUnavailableException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -85,5 +89,10 @@ public class LoanService {
         loanRepository.save(loan);
 
         return loan.getId();
+    }
+
+    public Page<Loan> findAllLoans(Pageable pageable) {
+
+        return loanRepository.findAllByDeletedAtIsNull(pageable);
     }
 }
