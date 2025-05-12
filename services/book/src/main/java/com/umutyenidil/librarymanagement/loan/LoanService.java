@@ -1,17 +1,17 @@
 package com.umutyenidil.librarymanagement.loan;
 
+import com.umutyenidil.librarymanagement.bookcopy.BookCopyAvailabilityEvent;
 import com.umutyenidil.librarymanagement.bookcopy.BookCopyService;
+import com.umutyenidil.librarymanagement.bookcopy.BookCopyAvailabilityPublisher;
 import com.umutyenidil.librarymanagement.common.exception.BusinessRuleViolationException;
 import com.umutyenidil.librarymanagement.common.exception.ResourceUnavailableException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,14 +26,15 @@ public class LoanService {
     private final LoanPenaltyRepository loanPenaltyRepository;
     private final LoanRepository loanRepository;
     private final BookCopyService bookCopyService;
+    private final BookCopyAvailabilityPublisher bookCopyAvailabilityPublisher;
 
     public UUID saveLoan(UUID patronId, LoanCreateRequest request) {
 
         // kullanicinin cezasi var mi diye kontrol et
-        var patronHasUnpaidLoanPenalty =  loanPenaltyRepository.existsUnpaidPenaltyByPatronId(patronId);
+        var patronHasUnpaidLoanPenalty = loanPenaltyRepository.existsUnpaidPenaltyByPatronId(patronId);
 
         // cezasi vars ahata firlat
-        if(patronHasUnpaidLoanPenalty) throw new BusinessRuleViolationException("error.patron.penalty.unpaid");
+        if (patronHasUnpaidLoanPenalty) throw new BusinessRuleViolationException("error.patron.penalty.unpaid");
 
         // kitap kopyasini bulmaya calis, yoksa hata firlat
         var bookCopy = bookCopyService.findAvailableBookCopyByBarcode(request.bookCopyBarcode());
@@ -42,7 +43,7 @@ public class LoanService {
         var existsActiveLoanByBookCopy = loanRepository.existsActiveLoanByBookCopyId(bookCopy.getId());
 
         // kitap baskasi tarafindan alinmis gorunuyor ise hata firlat
-        if(existsActiveLoanByBookCopy) throw new ResourceUnavailableException("error.bookcopy.notavailable");
+        if (existsActiveLoanByBookCopy) throw new ResourceUnavailableException("error.bookcopy.notavailable");
 
         // odunc alma ve son teslim tarihini olustur
         var borrowedAt = LocalDateTime.now();
@@ -56,6 +57,13 @@ public class LoanService {
                 .dueAt(dueAt)
                 .build();
         var savedLoan = loanRepository.save(loan);
+
+        bookCopyAvailabilityPublisher.publish(
+                BookCopyAvailabilityEvent.builder()
+                        .barcode(request.bookCopyBarcode())
+                        .available(false)
+                        .build()
+        );
 
         // odunc alma id'sini dondur
         return savedLoan.getId();
@@ -87,6 +95,13 @@ public class LoanService {
         // teslim edilme tarihini guncelle ve kaydet
         loan.setReturnedAt(LocalDateTime.now());
         loanRepository.save(loan);
+
+        bookCopyAvailabilityPublisher.publish(
+                BookCopyAvailabilityEvent.builder()
+                        .barcode(bookCopyBarcode)
+                        .available(true)
+                        .build()
+        );
 
         return loan.getId();
     }

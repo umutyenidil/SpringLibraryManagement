@@ -26,11 +26,13 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
         return (exchange, chain) -> {
             String path = exchange.getRequest().getPath().toString();
 
-            log.info("Validating token");
-
             if (path.equals("/api/v1/auth/validate")) {
                 exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
                 return exchange.getResponse().setComplete();
+            }
+
+            if (path.matches("^/api/v1/book-copies/barcode/.+/available$")) {
+                return chain.filter(exchange);
             }
 
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);

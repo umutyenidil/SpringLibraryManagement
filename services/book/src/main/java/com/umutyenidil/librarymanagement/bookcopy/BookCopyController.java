@@ -5,9 +5,11 @@ import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +20,7 @@ import java.util.UUID;
 public class BookCopyController {
 
     private final BookCopyService bookCopyService;
-    private final BookCopyMapper bookCopyMapper;
+    private final BookCopyAvailabilityPublisher bookCopyAvailabilityPublisher;
     private final MessageUtil messageUtil;
 
     @PreAuthorize("hasRole('LIBRARIAN')")
@@ -35,18 +37,13 @@ public class BookCopyController {
                 ));
     }
 
-    @GetMapping("/barcode/{barcode}/available")
-    public ResponseEntity<SuccessResponse<Boolean>> isBookCopyAvailable(
+    @GetMapping(value = "/barcode/{barcode}/available", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<BookCopyAvailabilityEvent> streamBookCopyAvailability(
             @PathVariable String barcode
     ) {
 
-        var available = bookCopyService.isBookCopyAvailableByBarcode(barcode);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(SuccessResponse.of(
-                        available,
-                        messageUtil.getMessage(available ? "success.bookcopy.availability.true" : "success.bookcopy.availability.false")
-                ));
+        return bookCopyAvailabilityPublisher
+                .stream()
+                .filter(event -> event.barcode().equals(barcode));
     }
 }
