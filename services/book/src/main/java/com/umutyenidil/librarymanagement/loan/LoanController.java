@@ -66,4 +66,19 @@ public class LoanController {
                 )
         );
     }
+
+    @PreAuthorize("hasRole('PATRON')")
+    @GetMapping("/my")
+    public ResponseEntity<PageResponse<LoanResponse>> findMyLoans(
+            @RequestHeader("X-User-Id") UUID userId,
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size
+    ) {
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        loanService.findLoansByPatronId(userId, PageRequest.of(page - 1, size))
+                                .map(loanMapper::toResponse)
+                )
+        );
+    }
 }

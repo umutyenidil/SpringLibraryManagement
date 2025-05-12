@@ -37,4 +37,6 @@ public interface LoanRepository extends JpaRepository<Loan, UUID> {
     Optional<Loan> findByBookCopyAndPatronIdAndReturnedAtIsNull(BookCopy bookCopy, UUID patronId);
 
     Page<Loan> findAllByDeletedAtIsNull(Pageable pageable);
+
+    Page<Loan> findByPatronIdAndDeletedAtIsNull(UUID patronId, Pageable pageable);
 }

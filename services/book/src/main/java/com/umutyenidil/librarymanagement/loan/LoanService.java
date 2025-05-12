@@ -95,4 +95,9 @@ public class LoanService {
 
         return loanRepository.findAllByDeletedAtIsNull(pageable);
     }
+
+    public Page<Loan> findLoansByPatronId(UUID patronId, Pageable pageable) {
+
+        return loanRepository.findByPatronIdAndDeletedAtIsNull(patronId, pageable);
+    }
 }
