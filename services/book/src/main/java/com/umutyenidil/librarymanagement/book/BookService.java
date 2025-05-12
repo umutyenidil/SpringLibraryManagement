@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -147,6 +148,16 @@ public class BookService {
     public Page<Book> findAllBooks(Pageable pageable) {
         return bookRepository.findAllByDeletedAtIsNull(pageable);
     }
+
+    public Page<Book> searchBooks(BookSearchRequest request, Pageable pageable) {
+
+        // gelen search parametrelerine gore bir filtreleme listesi olustur
+        Specification<Book> spec = BookSpecification.build(request);
+
+        // olusturulan filtrelemeye gore tum kayitlari page halinde getir
+        return bookRepository.findAll(spec, pageable);
+    }
+
 
     public void deleteBookById(UUID id) {
 

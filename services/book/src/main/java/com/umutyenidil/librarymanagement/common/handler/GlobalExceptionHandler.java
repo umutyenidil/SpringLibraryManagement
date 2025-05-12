@@ -90,11 +90,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.builder()
-                        .message(messageUtil.getMessage("error.common.parameter.invalid"))
-                        .build());
+                .body(ErrorResponse.of(messageUtil.getMessage(("error.common.parameter.invalid"))));
     }
 
     @ExceptionHandler(Exception.class)

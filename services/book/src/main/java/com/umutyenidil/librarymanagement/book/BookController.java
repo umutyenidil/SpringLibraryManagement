@@ -84,6 +84,21 @@ public class BookController {
         );
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<PageResponse<BookResponse>> searchBooks(
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size,
+            @ModelAttribute BookSearchRequest request
+    ) {
+
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        bookService.searchBooks(request, PageRequest.of(page - 1, size))
+                                .map(bookMapper::toBookResponse)
+                )
+        );
+    }
+
     @PreAuthorize("hasRole('LIBRARIAN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteBookById(
