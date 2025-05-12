@@ -5,6 +5,7 @@ import com.umutyenidil.librarymanagement.author.AuthorService;
 import com.umutyenidil.librarymanagement.category.CategoryMapper;
 import com.umutyenidil.librarymanagement.category.CategoryService;
 import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
+import com.umutyenidil.librarymanagement.common.exception.ValidationFieldException;
 import com.umutyenidil.librarymanagement.genre.GenreMapper;
 import com.umutyenidil.librarymanagement.genre.GenreService;
 import com.umutyenidil.librarymanagement.language.LanguageMapper;
@@ -37,40 +38,57 @@ public class BookService {
 
 
     public UUID saveBook(BookCreateRequest request) {
+
+        // kitap olusturma istegini kitap nesnesine donustur
         var book = bookMapper.toBook(request);
 
+        // kitap icin orijinal kitap id eklenmis mi kontrol et
         if (book.getOriginalBook() != null && book.getOriginalBook().getId() != null) {
-            var originalBook = bookRepository.findById(book.getOriginalBook().getId())
-                    .orElseThrow(() -> new BookNotFoundException("error.book.originalBook.notfound"));
 
+            // kitap icin eklenen orijinal kitap sistemde var mi diye kontrol et yoksa hata firlat
+            var originalBook = bookRepository.findById(book.getOriginalBook().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("error.book.originalBook.notfound"));
+
+            // orijinal kitap bulunduysa kitap nesnesine ekle
             book.setOriginalBook(originalBook);
         } else {
+
+            // kitap icin orijinal kitap eklenmemisse orijinal kitabi null olarak isaretle
             book.setOriginalBook(null);
         }
 
-        if(book.getOriginalBook() == null) {
-            if(book.getAuthors().isEmpty()) throw new BookAuthorRequiredException("error.book.author.required");
+        // orijinal kitap eklenmemisse bu kitap asil kitaptir, yoksa ceviri kitaptir ve yazar disinda cevirmenler gereklidir
+        if (book.getOriginalBook() == null) {
 
+            // kitabin yazar listesi bos mu diye kontrol et, bos ise hata firlat
+            if (book.getAuthors().isEmpty())
+                throw new ValidationFieldException("authorIds", "error.book.author.required");
+
+            // yazar listesinde sadece yazarlarin id'leri var, bunlari kontrol et ve id'lerine gore yazarlari getir
             var authors = book.getAuthors()
                     .stream()
                     .map(author -> {
-                        if (author.getId() == null) {
-                            throw new BookAuthorNotFoundException("error.book.author.notfound");
-                        }
 
+                        // yazar id bos ise hata firlat
+                        if (author.getId() == null) throw new ResourceNotFoundException("error.book.author.notfound");
+
+                        // yazari getir ve donustur
                         var authorResponse = authorService.findAuthorById(author.getId());
                         return authorMapper.toAuthor(authorResponse);
                     })
                     .toList();
 
+            // id'lerinden bulunan yazarlari kitap nesnesine ekle
             book.setAuthors(authors);
         } else {
-            if(book.getTranslators().isEmpty()) throw new BookTranslatorRequiredException("error.book.translator.required");
+            if (book.getTranslators().isEmpty())
+                throw new ValidationFieldException("translatorIds", "error.book.translator.required");
 
             var translators = book.getTranslators()
                     .stream()
                     .map(translator -> {
-                        if (translator.getId() == null) throw new BookTranslatorNotFoundException("error.book.translator.notfound");
+                        if (translator.getId() == null)
+                            throw new ResourceNotFoundException("error.book.translator.notfound");
 
                         var translatorResponse = authorService.findAuthorById(translator.getId());
                         return authorMapper.toAuthor(translatorResponse);
@@ -86,7 +104,7 @@ public class BookService {
             book.setLanguage(languageMapper.toLanguage(languageResponse));
         }
 
-        if(book.getPublisher() != null && book.getPublisher().getId() != null) {
+        if (book.getPublisher() != null && book.getPublisher().getId() != null) {
             var publisherResponse = publisherService.findPublisherId(book.getPublisher().getId());
 
             book.setPublisher(publisherMapper.toPublisher(publisherResponse));
@@ -95,7 +113,7 @@ public class BookService {
         var categories = book.getCategories()
                 .stream()
                 .map(category -> {
-                    if(category.getId() == null) throw new ResourceNotFoundException("error.category.notfound");
+                    if (category.getId() == null) throw new ResourceNotFoundException("error.category.notfound");
 
                     var categoryResponse = categoryService.findCategoryById(category.getId());
                     return categoryMapper.toCategory(categoryResponse);
@@ -106,7 +124,7 @@ public class BookService {
         var genres = book.getGenres()
                 .stream()
                 .map(genre -> {
-                    if(genre.getId() == null) throw new ResourceNotFoundException("error.genre.notfound");
+                    if (genre.getId() == null) throw new ResourceNotFoundException("error.genre.notfound");
 
                     var genreResponse = genreService.findGenreById(genre.getId());
                     return genreMapper.toGenre(genreResponse);
@@ -121,7 +139,7 @@ public class BookService {
 
     public Book findBookById(UUID id) {
         return bookRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new BookNotFoundException("error.book.notfound"));
+                .orElseThrow(() -> new ResourceNotFoundException("error.book.notfound"));
     }
 
     public Page<Book> findAllBooks(Pageable pageable) {

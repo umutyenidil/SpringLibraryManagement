@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.book;
 
+import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public class BookCopyService {
     public List<UUID> saveBookCopies(List<BookCopy> bookCopies) {
         var relatedBook = bookService.findBookById(bookCopies.getFirst().getBook().getId());
 
-        if (relatedBook == null) throw new BookNotFoundException("error.book.notfound");
+        if (relatedBook == null) throw new ResourceNotFoundException("error.book.notfound");
 
         List<BookCopy> savedCopies = bookCopyRepository.saveAll(bookCopies);
         return savedCopies.stream()
@@ -28,6 +29,6 @@ public class BookCopyService {
 
     public BookCopy findBookCopyById(UUID id) {
         return bookCopyRepository.findById(id)
-                .orElseThrow(() -> new BookCopyNotFoundException(""));
+                .orElseThrow(() -> new ResourceNotFoundException("error.book.notfound"));
     }
 }

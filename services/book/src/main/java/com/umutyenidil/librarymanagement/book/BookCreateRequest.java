@@ -12,6 +12,7 @@ import java.util.UUID;
 
 @Builder
 public record BookCreateRequest(
+
         @Nullable
         UUID originalBookId,
         @NotNull(message = "{error.book.validation.isbn}")

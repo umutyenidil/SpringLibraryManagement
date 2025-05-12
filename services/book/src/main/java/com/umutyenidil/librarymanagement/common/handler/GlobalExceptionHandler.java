@@ -1,10 +1,10 @@
 package com.umutyenidil.librarymanagement.common.handler;
 
-import com.umutyenidil.librarymanagement.book.BookCopyNotFoundException;
 import com.umutyenidil.librarymanagement.common.dto.response.ErrorResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.ValidationResponse;
 import com.umutyenidil.librarymanagement.common.exception.ResourceDuplicationException;
 import com.umutyenidil.librarymanagement.common.exception.ResourceNotFoundException;
+import com.umutyenidil.librarymanagement.common.exception.ValidationFieldException;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import com.umutyenidil.librarymanagement.loan.BookCopyNotAvailableException;
 import com.umutyenidil.librarymanagement.loan.PatronHasUnpaidPenaltyException;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -70,7 +71,21 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ValidationResponse.of(errors, messageUtil.getMessage(("error.common.validation"))));
+                .body(ValidationResponse.of(
+                        errors,
+                        messageUtil.getMessage(("error.common.validation"))
+                ));
+    }
+
+    @ExceptionHandler(ValidationFieldException.class)
+    public ResponseEntity<ValidationResponse> handleValidationFieldException(ValidationFieldException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ValidationResponse.of(
+                        Map.of(ex.getField(), messageUtil.getMessage(ex.getMessageCode())),
+                        messageUtil.getMessage("error.common.validation")
+                ));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -98,15 +113,6 @@ public class GlobalExceptionHandler {
                                 .message("Kullanıcının ödenmemiş cezası bulunuyor")
                                 .build()
                 );
-    }
-
-    @ExceptionHandler(BookCopyNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleBookCopyNotFoundException(BookCopyNotFoundException ex) {
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body(ErrorResponse.builder()
-                        .message("Kitap örneği bulunamadı")
-                        .build());
     }
 
     @ExceptionHandler(BookCopyNotAvailableException.class)
