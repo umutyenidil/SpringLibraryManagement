@@ -1,5 +1,6 @@
 package com.umutyenidil.librarymanagement.book;
 
+import com.umutyenidil.librarymanagement.common.dto.response.MessageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.PageResponse;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
@@ -81,5 +82,17 @@ public class BookController {
                                 .map(bookMapper::toBookResponse)
                 )
         );
+    }
+
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteBookById(
+            @PathVariable UUID id
+    ) {
+        bookService.deleteBookById(id);
+
+        return ResponseEntity.ok(MessageResponse.of(
+                messageUtil.getMessage("success.book.delete")
+        ));
     }
 }

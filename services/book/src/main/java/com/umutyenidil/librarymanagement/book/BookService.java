@@ -13,10 +13,12 @@ import com.umutyenidil.librarymanagement.language.LanguageService;
 import com.umutyenidil.librarymanagement.publisher.PublisherMapper;
 import com.umutyenidil.librarymanagement.publisher.PublisherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -144,5 +146,17 @@ public class BookService {
 
     public Page<Book> findAllBooks(Pageable pageable) {
         return bookRepository.findAllByDeletedAtIsNull(pageable);
+    }
+
+    public void deleteBookById(UUID id) {
+
+        // kitap var mi diye kontrol et
+        bookRepository.findById(id)
+                .ifPresent(book -> {
+
+                    // kitap varsa deleted_at degerini simdi yap ve veritabanina kaydet
+                    book.setDeletedAt(LocalDateTime.now());
+                    bookRepository.save(book);
+                });
     }
 }
