@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface LoanRepository extends JpaRepository<Loan, UUID> {
@@ -30,4 +31,6 @@ public interface LoanRepository extends JpaRepository<Loan, UUID> {
     boolean existsActiveLoanByBookCopyId(@Param("bookCopyId") UUID bookCopyId);
 
     boolean existsByBookCopyAndReturnedAtIsNull(BookCopy bookCopy);
+
+    Optional<Loan> findByBookCopyAndPatronIdAndReturnedAtIsNull(BookCopy bookCopy, UUID patronId);
 }

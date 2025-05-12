@@ -1,6 +1,5 @@
 package com.umutyenidil.librarymanagement.loan;
 
-import com.umutyenidil.librarymanagement.book.Book;
 import com.umutyenidil.librarymanagement.common.dto.response.SuccessResponse;
 import com.umutyenidil.librarymanagement.common.util.MessageUtil;
 import jakarta.validation.Valid;
@@ -31,6 +30,21 @@ public class LoanController {
                 .body(SuccessResponse.of(
                         loanService.saveLoan(userId, request),
                         messageUtil.getMessage("success.loan.create")
+                ));
+    }
+
+    @PreAuthorize("hasRole('PATRON')")
+    @PatchMapping("/return/{barcode}")
+    public ResponseEntity<SuccessResponse<UUID>> returnLoanByBookCopyBarcode(
+            @RequestHeader("X-User-Id") UUID userId,
+            @PathVariable("barcode") String bookCopyBarcode
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.of(
+                        loanService.returnLoanByBookCopyBarcode(userId, bookCopyBarcode),
+                        messageUtil.getMessage("success.loan.return")
                 ));
     }
 }

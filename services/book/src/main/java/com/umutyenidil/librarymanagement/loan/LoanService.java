@@ -6,6 +6,7 @@ import com.umutyenidil.librarymanagement.common.exception.ResourceUnavailableExc
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -67,5 +68,22 @@ public class LoanService {
         final var end = LocalDate.now().atStartOfDay();
 
         return loanRepository.findUnreturnedLoanIdsWithoutPenaltyBetweenDates(start, end);
+    }
+
+    @Transactional
+    public UUID returnLoanByBookCopyBarcode(UUID userId, String bookCopyBarcode) {
+
+        // kitap kopyasi varsa getir yoksa hata firlat
+        var bookCopy = bookCopyService.findBookCopyByBarcode(bookCopyBarcode);
+
+        // kitap kopyasi ve user ile olusturulmus bir odunc alma var mi kontrol et yoksa hata firlat
+        var loan = loanRepository.findByBookCopyAndPatronIdAndReturnedAtIsNull(bookCopy, userId)
+                .orElseThrow(() -> new ResourceUnavailableException("error.loan.notactive.or.notowned"));
+
+        // teslim edilme tarihini guncelle ve kaydet
+        loan.setReturnedAt(LocalDateTime.now());
+        loanRepository.save(loan);
+
+        return loan.getId();
     }
 }
