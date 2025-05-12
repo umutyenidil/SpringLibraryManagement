@@ -36,7 +36,7 @@ public class LoanService {
         if(patronHasUnpaidLoanPenalty) throw new BusinessRuleViolationException("error.patron.penalty.unpaid");
 
         // kitap kopyasini bulmaya calis, yoksa hata firlat
-        var bookCopy = bookCopyService.findBookCopyByBarcode(request.bookCopyBarcode());
+        var bookCopy = bookCopyService.findAvailableBookCopyByBarcode(request.bookCopyBarcode());
 
         // kitap kopyasi su an baskasi tarafindan odunc alinmis olarak mi gorunuyor kontrol et
         var existsActiveLoanByBookCopy = loanRepository.existsActiveLoanByBookCopyId(bookCopy.getId());

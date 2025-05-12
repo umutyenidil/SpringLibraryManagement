@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface BookCopyRepository extends JpaRepository<BookCopy, UUID> {
 
     Optional<BookCopy> findByBarcode(String barcode);
+
+    Optional<BookCopy> findByBarcodeAndStatus(String barcode, BookCopy.Status status);
 }

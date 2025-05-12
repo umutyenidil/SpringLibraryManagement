@@ -42,6 +42,10 @@ public class BookCopy {
     @Column(nullable = false)
     private Condition condition;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -76,6 +80,21 @@ public class BookCopy {
             for (Condition condition : values()) {
                 if (condition.name().equalsIgnoreCase(value)) {
                     return condition;
+                }
+            }
+            return null;
+        }
+    }
+
+    public enum Status {
+        AVAILABLE,
+        NOT_AVAILABLE,;
+
+        @JsonCreator
+        public static Status fromString(String value) {
+            for (Status status : values()) {
+                if (status.name().equalsIgnoreCase(value)) {
+                    return status;
                 }
             }
             return null;
