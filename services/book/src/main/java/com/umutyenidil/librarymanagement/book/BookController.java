@@ -110,4 +110,18 @@ public class BookController {
                 messageUtil.getMessage("success.book.delete")
         ));
     }
+
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    @PutMapping("/{id}")
+    public ResponseEntity<MessageResponse> updateBookById(
+            @PathVariable UUID id,
+            @RequestBody @Valid BookUpdateRequest request
+    ) {
+
+        bookService.updateBook(id, request);
+
+        return ResponseEntity.ok(MessageResponse.of(
+                messageUtil.getMessage("success.book.update")
+        ));
+    }
 }
