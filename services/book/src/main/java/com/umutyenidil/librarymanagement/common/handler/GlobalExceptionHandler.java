@@ -28,6 +28,15 @@ public class GlobalExceptionHandler {
 
     private final MessageUtil messageUtil;
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorResponse.of(messageUtil.getMessage("error.common.internalserver")));
+    }
+
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
         return ResponseEntity
@@ -92,15 +101,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.of(messageUtil.getMessage(("error.common.parameter.invalid"))));
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        log.error(ex.getMessage(), ex);
-
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorResponse.of(messageUtil.getMessage("error.common.internalserver")));
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
