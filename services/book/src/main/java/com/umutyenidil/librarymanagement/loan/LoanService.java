@@ -100,4 +100,9 @@ public class LoanService {
 
         return loanRepository.findByPatronIdAndDeletedAtIsNull(patronId, pageable);
     }
+
+    public Page<LoanPenalty> findAllLoanPenalties(Pageable pageable) {
+
+        return loanPenaltyRepository.findAll(pageable);
+    }
 }

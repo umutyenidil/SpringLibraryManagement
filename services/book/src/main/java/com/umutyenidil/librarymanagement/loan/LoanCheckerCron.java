@@ -14,6 +14,7 @@ public class LoanCheckerCron {
 
     private final LoanService loanService;
 
+    // todo: kontrol amacli 15 saniyede bir calisacak sekilde ayarlanmistir, hedeflenen calisma periyodu her gece yarisidir.
     @Scheduled(cron = "*/15 * * * * *")
     public void checkLoans() {
 

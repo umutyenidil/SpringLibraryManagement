@@ -22,6 +22,7 @@ public class LoanController {
     private final LoanService loanService;
     private final MessageUtil messageUtil;
     private final LoanMapper loanMapper;
+    private final LoanPenaltyMapper loanPenaltyMapper;
 
     @PreAuthorize("hasRole('PATRON')")
     @PostMapping
@@ -74,10 +75,26 @@ public class LoanController {
             @RequestParam(defaultValue = "1") @Positive Integer page,
             @RequestParam(defaultValue = "20") @Positive Integer size
     ) {
+
         return ResponseEntity.ok(
                 PageResponse.fromPage(
                         loanService.findLoansByPatronId(userId, PageRequest.of(page - 1, size))
                                 .map(loanMapper::toResponse)
+                )
+        );
+    }
+
+    @PreAuthorize("hasRole('LIBRARIAN')")
+    @GetMapping("penalties")
+    public ResponseEntity<PageResponse<LoanPenaltyResponse>> findLoanPenalties(
+            @RequestParam(defaultValue = "1") @Positive Integer page,
+            @RequestParam(defaultValue = "20") @Positive Integer size
+    ) {
+
+        return ResponseEntity.ok(
+                PageResponse.fromPage(
+                        loanService.findAllLoanPenalties(PageRequest.of(page - 1, size))
+                                .map(loanPenaltyMapper::toResponse)
                 )
         );
     }
