@@ -8,14 +8,26 @@ spring:
         - id: book-service
           uri: lb:http://BOOK-SERVICE
           predicates:
-            - Path=/api/v1/books/**, /api/v1/book-copies/**, /api/v1/authors/**, /api/v1/categories/**, /api/v1/genres/**, /api/v1/languages/**, /api/v1/loans/**, /api/v1/publishers/**
+            - Path=/api/v1/books/**, /api/v1/book-copies/**, /api/v1/authors/**, /api/v1/categories/**, /api/v1/genres/**, /api/v1/languages/**, /api/v1/loans/**, /api/v1/publishers/**, /book-service/v3/api-docs
           filters:
             - name: JwtFilter
         - id: user-service
           uri: lb:http://USER-SERVICE
           predicates:
-            - Path=/api/v1/auth/**, /api/v1/users/**
+            - Path=/api/v1/auth/**, /api/v1/users/**, /user-service/v3/api-docs
           filters:
             - name: BlockValidateFilter
 server:
   port: 8080
+
+springdoc:
+  swagger-ui:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
+    urls:
+      - name: book-service
+        url: /book-service/v3/api-docs
+      - name: user-service
+        url: /user-service/v3/api-docs

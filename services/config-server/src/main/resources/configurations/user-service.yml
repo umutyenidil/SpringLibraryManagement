@@ -16,6 +16,10 @@ spring:
 server:
   port: 8084
 
+springdoc:
+  api-docs:
+    path: /user-service/v3/api-docs
+
 application:
   security:
     jwt:

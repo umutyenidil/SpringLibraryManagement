@@ -35,6 +35,10 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
                 return chain.filter(exchange);
             }
 
+            if (path.equals("/book-service/v3/api-docs")) {
+                return chain.filter(exchange);
+            }
+
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {

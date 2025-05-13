@@ -21,3 +21,6 @@ spring:
     encoding: UTF-8
 server:
   port: 8083
+springdoc:
+  api-docs:
+    path: /book-service/v3/api-docs
