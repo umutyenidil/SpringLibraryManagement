@@ -1,14 +1,21 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/book
+    url: jdbc:postgresql://localhost:5432/user
     username: umut
     password: umut
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    baseline-description: "init"
+    baseline-version: 0
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
   messages:
     basename: i18n/messages
     encoding: UTF-8
