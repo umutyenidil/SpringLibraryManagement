@@ -28,8 +28,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req ->
 
                         req
-                                .requestMatchers("/api/v1/book-copies/barcode/*/available")
-                                .permitAll()
+                                .requestMatchers(
+                                        "/api/v1/book-copies/barcode/*/available",
+                                        "/v2/api-docs",
+                                        "/swagger-resources",
+                                        "/swagger-resources/**",
+                                        "/configuration/ui",
+                                        "/configuration/security",
+                                        "/swagger-ui.html",
+                                        "/webjars/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger.html",
+                                        "/swagger-ui.html",
+                                        "/docs/**"
+                                ).permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
