@@ -1,9 +1,9 @@
 eureka:
   instance:
-    hostname: localhost
+    hostname: discovery-server
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka/
+      defaultZone: http://discovery-server:8761/eureka/
 
 spring:
   cloud:
@@ -11,6 +11,22 @@ spring:
       override-system-properties: false
 
 management:
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
   tracing:
     sampling:
       probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+      group:
+        readiness:
+          include: readinessState
+  health:
+    readinessstate:
+      enabled: true

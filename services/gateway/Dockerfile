@@ -1,30 +1,26 @@
-# Use Amazon Corretto JDK 21 base image
-FROM amazoncorretto:21-alpine as builder
+# Stage 1: Build the application using a shared Maven cache volume
+FROM amazoncorretto:21-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy the Maven wrapper and pom.xml first
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copy only files needed for dependency resolution
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
 
-# Download dependencies
-RUN ./mvnw dependency:go-offline -B
+# Download dependencies using shared Maven repo
+RUN chmod +x ./mvnw && ./mvnw dependency:go-offline -B
 
-# Copy the rest of the source code
-COPY . .
+COPY src ./src
 
-# Package the application
 RUN ./mvnw clean package -DskipTests
 
-# Final image
+# Stage 2: Create a lightweight runtime image
 FROM amazoncorretto:21-alpine
-
-# Create app directory
 WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-# Copy jar from builder
-COPY --from=builder /app/target/*.jar app.jar
+RUN apk add --no-cache curl
 
 # Expose application port (override if needed per service)
 EXPOSE 8080

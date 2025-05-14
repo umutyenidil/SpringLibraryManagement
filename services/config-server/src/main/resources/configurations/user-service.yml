@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/user
+    url: jdbc:postgresql://postgres:5432/user
     username: umut
     password: umut
     driver-class-name: org.postgresql.Driver

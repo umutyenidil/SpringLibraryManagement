@@ -1,5 +1,7 @@
 spring:
   cloud:
+    discovery:
+      enabled: true
     gateway:
       discovery:
         locator:

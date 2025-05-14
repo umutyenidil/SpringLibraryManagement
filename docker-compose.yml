@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   postgres:
     container_name: lm_postgres
@@ -12,6 +14,8 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
+    networks:
+      - lm_network
 
   zipkin:
     container_name: lm_zipkin
@@ -24,59 +28,104 @@ services:
   config-server:
     container_name: lm_config_server
     build: ./services/config-server
+    volumes:
+      - maven_repository_cache:/root/.m2
     ports:
       - "8081:8081"
     networks:
       - lm_network
-    depends_on:
-      - postgres
+    healthcheck:
+      test: curl --fail --silent http://config-server:8081/actuator/health/readiness || exit 1
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
 
   discovery-server:
     container_name: lm_discovery_server
     build: ./services/discovery
+    volumes:
+      - maven_repository_cache:/root/.m2
     ports:
       - "8761:8761"
     networks:
       - lm_network
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent http://discovery-server:8761/actuator/health/readiness || exit 1
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
 
   user-service:
     container_name: lm_user_service
     build: ./services/user
+    volumes:
+      - maven_repository_cache:/root/.m2
     ports:
       - "8084:8084"
     networks:
       - lm_network
     depends_on:
-      - config-server
-      - discovery-server
-      - postgres
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent http://user-service:8084/actuator/health/readiness || exit 1
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
 
   book-service:
     container_name: lm_book_service
     build: ./services/book
+    volumes:
+      - maven_repository_cache:/root/.m2
     ports:
       - "8083:8083"
     networks:
       - lm_network
     depends_on:
-      - config-server
-      - discovery-server
-      - postgres
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent http://book-service:8083/actuator/health/readiness || exit 1
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
 
   cloud-gateway:
     container_name: lm_gateway
     build: ./services/gateway
+    volumes:
+      - maven_repository_cache:/root/.m2
     ports:
       - "8080:8080"
     networks:
       - lm_network
     depends_on:
-      - config-server
-      - discovery-server
-      - user-service
-      - book-service
+      user-service:
+        condition: service_healthy
+      book-service:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail --silent http://cloud-gateway:8080/actuator/health/readiness || exit 1
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
 
 networks:
   lm_network:
@@ -84,3 +133,96 @@ networks:
 
 volumes:
   lm_postgres_data:
+  maven_repository_cache:
+
+#services:
+#  postgres:
+#    container_name: lm_postgres
+#    image: postgres
+#    environment:
+#      POSTGRES_USER: umut
+#      POSTGRES_PASSWORD: umut
+#      PGDATA: /var/lib/postgresql/data
+#    volumes:
+#      - lm_postgres_data:/var/lib/postgresql/data
+#      - ./docker:/docker-entrypoint-initdb.d/
+#    ports:
+#      - "5432:5432"
+#    restart: unless-stopped
+#
+#  zipkin:
+#    container_name: lm_zipkin
+#    image: openzipkin/zipkin
+#    ports:
+#      - "9411:9411"
+#    networks:
+#      - lm_network
+#
+#  config-server:
+#    container_name: lm_config_server
+#    build: ./services/config-server
+#    volumes:
+#      - maven_repository_cache:/root/.m2
+#    ports:
+#      - "8081:8081"
+#    networks:
+#      - lm_network
+#    depends_on:
+#      - postgres
+#
+#  discovery-server:
+#    container_name: lm_discovery_server
+#    build: ./services/discovery
+#    volumes:
+#      - maven_repository_cache:/root/.m2
+#    ports:
+#      - "8761:8761"
+#    networks:
+#      - lm_network
+#    depends_on:
+#      - config-server
+#
+#  user-service:
+#    container_name: lm_user_service
+#    build: ./services/user
+#    volumes:
+#      - maven_repository_cache:/root/.m2
+#    ports:
+#      - "8084:8084"
+#    networks:
+#      - lm_network
+#    depends_on:
+#      - discovery-server
+#
+#  book-service:
+#    container_name: lm_book_service
+#    build: ./services/book
+#    volumes:
+#      - maven_repository_cache:/root/.m2
+#    ports:
+#      - "8083:8083"
+#    networks:
+#      - lm_network
+#    depends_on:
+#      - discovery-server
+#
+#  cloud-gateway:
+#    container_name: lm_gateway
+#    build: ./services/gateway
+#    volumes:
+#      - maven_repository_cache:/root/.m2
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - lm_network
+#    depends_on:
+#      - user-service
+#      - book-service
+#
+#networks:
+#  lm_network:
+#    driver: bridge
+#
+#volumes:
+#  lm_postgres_data:
+#  maven_repository_cache:
