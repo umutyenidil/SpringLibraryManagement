@@ -64,6 +64,7 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus status) {
+        log.info("onError: {}", err);
         exchange.getResponse().setStatusCode(status);
         return exchange.getResponse().setComplete();
     }

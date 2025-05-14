@@ -1,0 +1,896 @@
+{
+	"info": {
+		"_postman_id": "55d29257-a4f3-44d1-b000-c2f12b2b1cb3",
+		"name": "Library Management API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "36016830"
+	},
+	"item": [
+		{
+			"name": "Api",
+			"item": [
+				{
+					"name": "V1",
+					"item": [
+						{
+							"name": "Authentication",
+							"item": [
+								{
+									"name": "Register Librarian",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept-Language",
+												"value": "tr",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"umutyenidil@librarymanagement.com\",\r\n    \"password\": \"Test1234.\",\r\n    \"userDetail\": {\r\n        \"name\": \"Umut\",\r\n        \"surname\": \"Yenidil\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/auth/register-librarian"
+									},
+									"response": []
+								},
+								{
+									"name": "Register Patron",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"umutyenidil@icloud.com\",\r\n    \"password\": \"Test1234.\",\r\n    \"userDetail\": {\r\n        \"name\": \"Mehmet\",\r\n        \"surname\": \"Akbulut\",\r\n        \"phone\": \"00905432459956\",\r\n        \"fullAddress\": \"İstanbul/Etiler\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/auth/register-patron"
+									},
+									"response": []
+								},
+								{
+									"name": "Login Librarian",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"umutyenidil@librarymanagement.com\",\r\n    \"password\": \"Test1234.\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/auth/login"
+									},
+									"response": []
+								},
+								{
+									"name": "Login Patron",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"umutyenidil@icloud.com\",\r\n    \"password\": \"Test1234.\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/auth/login"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "User",
+							"item": [
+								{
+									"name": "Find All Patron Users",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ2OTY1OTE1LCJleHAiOjE3NDY5NzQ1NTUsImF1dGhvcml0aWVzIjpbIlBBVFJPTiJdfQ.opNaPvkgyi6H2mLMuYNQ7FJVEroD-D6zL9zCkhniGv31C-cDUHIxTUzTX3kiqFdqP6FrTm8tP4iT396oN_2i3g"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/users"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Patron User",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Mehmet\",\r\n    \"surname\": \"Akbulut\",\r\n    \"phone\": \"00905432459956\",\r\n    \"fullAddress\": \"İstanbul/Etiler\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/users/82f50eda-eafe-463d-aa61-5336676cd6a7"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Patron User",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDY5ODI1NjIsImV4cCI6MTc0Njk5MTIwMiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.4EEi0v4eDgkUhxqt54Lben6xE_6rxWHxcs_6lDG6CaIhlyaPumyEOm1YkcJ0I-I1rMzhiiCVlFhgfAwdERk9SA"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/users/82f50eda-eafe-463d-aa61-5336676cd6a7"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Category",
+							"item": [
+								{
+									"name": "Save Category",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Science Fiction\",\r\n}"
+										},
+										"url": "http://localhost:8080/api/v1/categories"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Categories",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDk0OTgsImV4cCI6MTc0NzAxODEzOCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.TjHACFQQQjWeQvtgpyW8B63JwLZ4u7FEvYPJxVqXj0YXFKDLXJKSRlb6V0r3HkWmDrwTcF75fPhlJnA2AkdhsQ"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/categories"
+									},
+									"response": []
+								},
+								{
+									"name": "Find Category",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ2OTkwNzYzLCJleHAiOjE3NDY5OTk0MDMsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.IsqvPX_vb6RTg0EAe-jdzkCfoGWQIiPrOIwFxZX-F12rpp-tzWLzX8nuOfw6IS1toJtS6QOKb7lgq7ydH_jtMw"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/categories/e56b69f4-e8b0-4182-b4ce-05f0c1ade0a8"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Category",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDY5OTE0OTcsImV4cCI6MTc0NzAwMDEzNywiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.Bwqcp4rBxcgDQcY5Wy9sTG5StZ24lU44XhL7zlTodDCRmAMVauRt7hDDFyyewkmQX3JNm_p1E3YusA7daIFiIA"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/categories/e56b69f4-e8b0-4182-b4ce-05f0c1ade0a8"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Genre",
+							"item": [
+								{
+									"name": "Save Genre",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDY5OTE0OTcsImV4cCI6MTc0NzAwMDEzNywiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.Bwqcp4rBxcgDQcY5Wy9sTG5StZ24lU44XhL7zlTodDCRmAMVauRt7hDDFyyewkmQX3JNm_p1E3YusA7daIFiIA"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Fantasy\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/genres"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Genres",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDk1OTAsImV4cCI6MTc0NzAxODIzMCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.H_e47eB-TGPj9b0rIkg8VcX1iIbcyUyTonwbj-BTW0tYD6IhPPURd-6x9pxDt5Dy9f4EfGynFYsbuyYmsn8lwQ"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/genres"
+									},
+									"response": []
+								},
+								{
+									"name": "Find Genre",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ2OTkyODUxLCJleHAiOjE3NDcwMDE0OTEsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.E2O267muA9cbO28KaU0wCztURANB07m5LH02iF5AiC8pDjAyW_9vLoXIwsnzSacznQlX3AbJzI3gMFDTAcjS8Q"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/genres/2455c953-eb24-4bba-bc4f-703c123885dd"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Genre",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDY5OTMyNzQsImV4cCI6MTc0NzAwMTkxNCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.bzs9g_Huy39tHp-S7xbhOsLw72ydHyJdYcNoijPEJsR8MGLT212wnk887Zf3w7OYmblWOMfOmELgoaSUHWNpew"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/genres/2455c953-eb24-4bba-bc4f-703c123885dc"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Language",
+							"item": [
+								{
+									"name": "Save Language",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDY5OTQ2NjQsImV4cCI6MTc0NzAwMzMwNCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.JVDvqV3s8BMOOmzVmEFzwTk0L86Te3e40fSnxAsbWsXjeKruY-f-B8wKQdN3HomaD3MeC7LWGAZWpiXgGhmdEA"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"German\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/languages"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Langauges",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDkzNTksImV4cCI6MTc0NzAxNzk5OSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.JeG2Q-1zr3aNAI6TMHCT-sHHiQ9bhspnCz0U0mZNiVeAD8EuHly5RSJajBEjw7AcKCigCks9GhnSJtYITEnRBg"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/languages"
+									},
+									"response": []
+								},
+								{
+									"name": "Find Language",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ2OTk1NTA2LCJleHAiOjE3NDcwMDQxNDYsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.8M6PO1DeBcWfASx_yI-fNFmm5NNL2hKFLxRk7wx2ebKQcZdo426wJM659ZGscWN9e2_3SVrDxg3q8yQqwj6INw"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/languages/9925db05-4722-4941-8dc2-fb7aa33fd108"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Language",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDY5OTU5OTUsImV4cCI6MTc0NzAwNDYzNSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.dqAA2CEdSB5_-PvCgZvZLqF16jM-nojASjQsLUCGZZEtwqBbjcfhVPOFH8oWWVNlktfWt12QMyLwlcex6y2EAg"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/languages/9925db05-4722-4941-8dc2-fb7aa33fd108"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Author",
+							"item": [
+								{
+									"name": "Save Author",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDY5OTcyODEsImV4cCI6MTc0NzAwNTkyMSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.JdXtzi0La7kciz7l0TyyJ44ZU45IGuYWvSfl2cuzsHz_7FdLeH8cCo2foiGghTMp6CCRNn4qi39sVj5qy0Jq1w"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Zülfü\",\r\n    \"surname\": \"Livaneli\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/authors"
+									},
+									"response": []
+								},
+								{
+									"name": "Find Author",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDA0OTczLCJleHAiOjE3NDcwMTM2MTMsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.3hxb7ieAHb99LwMoCHFTguOzHUsyKGBi5CU3kOEkDzxPJo_aXoX1PAuATug4J7h8Q3W2iVYCTXd4fCvQEVJT_A"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/authors/263e7a02-cd0d-49e7-b4c6-c76bc122e5e3"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Authors",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDk2MjgsImV4cCI6MTc0NzAxODI2OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.Fr6kUv1dMjD-DDU8KsQk-JhwoitaSGSptWCOtynO4osjdllfrd3AQ1b04TBAX9Q16myzcROpwWPGfBIigftQRA"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/authors"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Author",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDU1MzYsImV4cCI6MTc0NzAxNDE3NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.cSSgq5z_h9FXznqhM0cQDBTRX5Pk2rRNcC3UH-jI4GWoEWHm1XOPoZeDhfjl2KBtkLyh-Tja8opDCGhkOWc51w"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/authors/263e7a02-cd0d-49e7-b4c6-c76bc122e5e3"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Publisher",
+							"item": [
+								{
+									"name": "Save Publisher",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDYyMjIsImV4cCI6MTc0NzAxNDg2MiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.NxWPdsfDJfNuaGQ-3P32Xk82oqHvT7166Tt3YXlLrFUaEsDKSFYDyifUCgVbZ1OuKtMgKdQoTx1R2KJX0rMjBQ"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Is Bankasi Yayinlari\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/publishers"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Publishers",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDk0NDEsImV4cCI6MTc0NzAxODA4MSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.APemqYpG2actW6eTGfVgHCJdJARdisw-Q10sLn-eBNAYV23lKwS7Frx4nmANhGmHvfzqgLePr_oRLUruAzuzqQ"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/publishers"
+									},
+									"response": []
+								},
+								{
+									"name": "Find Publisher",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDA2NzE0LCJleHAiOjE3NDcwMTUzNTQsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.Nkg8XGnIx3ixJ8-NjU1OlQhiIqEubFnpFkqHIxJJZAHcKooQRB0JwfpmQQd6hdvSEQi_eXYVgmOlOKnlipL59w"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/publishers/dd5d6b53-6409-4733-8081-4e5c9b46c08b"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Publisher",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDcyNTcsImV4cCI6MTc0NzAxNTg5NywiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.u5qHQCmDT-5BAPwWGy_JNtfWfG7e-A8spDpJTuF_9N5Y7JgluVUwgzLdY2bIwSoHC2zVRP74eaY5O91NEyoQuQ"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/publishers/dd5d6b53-6409-4733-8081-4e5c9b46c08b"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Book",
+							"item": [
+								{
+									"name": "Save Book",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMDk2MjgsImV4cCI6MTc0NzAxODI2OCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.Fr6kUv1dMjD-DDU8KsQk-JhwoitaSGSptWCOtynO4osjdllfrd3AQ1b04TBAX9Q16myzcROpwWPGfBIigftQRA"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Test Book\",\r\n    \"description\": \"Test Book Description\",\r\n    \"audience\": \"GENERAL\",\r\n    \"numberOfPages\": 199,\r\n    \"isbn\": \"978-2-3135-1508-2\",\r\n    \"format\": \"PAPERBACK\",\r\n    \"edition\": 1,\r\n    \"publishDate\": \"2025-01-12\",\r\n    \"languageId\": \"374a83cc-6226-4339-832a-ee37aead6838\",\r\n    \"publisherId\": \"8f56ef0d-2cf4-433e-937a-9e899b040ef0\",\r\n    \"categoryIds\": [\"ec3ac394-2c6d-4f20-92f0-0e47141639be\"],\r\n    \"genreIds\": [\"f88a2549-0800-4ebf-beb2-bbed1fe1004b\"],\r\n    \"authorIds\": [\"cb64d252-aacb-41bc-9035-57e267e56010\"]\r\n    \r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/books"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Books",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDc4NzQ2LCJleHAiOjE3NDcwODczODYsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.T3vgu9NxJHdphfVBnRHw8SJ8AW15Aj3UmkqGWc7VVfMoVdqcTkETGLDpM-HEAJCYm-akIxly7wSTmoMUMJxOhA"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/books"
+									},
+									"response": []
+								},
+								{
+									"name": "Find Book",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMTE5MjYsImV4cCI6MTc0NzAyMDU2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.Xgc5-0n145HTjEZfgi9p_kslmm64jGUf0xw2JzNyiSro83aOl4XciwSfqTaee3vGWnDEZ3GRm6RPl0KWH5tYDw"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/books/89000404-c45e-4961-9f41-91dc7cf70ce8"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Book",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMTE5MjYsImV4cCI6MTc0NzAyMDU2NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.Xgc5-0n145HTjEZfgi9p_kslmm64jGUf0xw2JzNyiSro83aOl4XciwSfqTaee3vGWnDEZ3GRm6RPl0KWH5tYDw"
+											}
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/books/89000404-c45e-4961-9f41-91dc7cf70ce8"
+									},
+									"response": []
+								},
+								{
+									"name": "Search Books",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDI4NjY2LCJleHAiOjE3NDcwMzczMDYsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.UNBIceXaym2TAYLWYq84tcfelwBz58Io1aZvEfpToErzsNSk9F_sxG1LbfU6mYtDU06nBvV7aDkfZdNR0qY9mQ"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8080/api/v1/books/search?q=ook&page=1&size=20&sort=name,asc",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"api",
+												"v1",
+												"books",
+												"search"
+											],
+											"query": [
+												{
+													"key": "q",
+													"value": "ook"
+												},
+												{
+													"key": "languageId",
+													"value": "374a83cc-6226-4339-832a-ee37aead6838",
+													"disabled": true
+												},
+												{
+													"key": "publisherId",
+													"value": "8f56ef0d-2cf4-433e-937a-9e899b040ef0",
+													"disabled": true
+												},
+												{
+													"key": "genreIds",
+													"value": "f88a2549-0800-4ebf-beb2-bbed1fe1004b",
+													"disabled": true
+												},
+												{
+													"key": "categoryId",
+													"value": "ec3ac394-2c6d-4f20-92f0-0e47141639be",
+													"disabled": true
+												},
+												{
+													"key": "authorIds",
+													"value": "cb64d252-aacb-41bc-9035-57e267e56010",
+													"disabled": true
+												},
+												{
+													"key": "audience",
+													"value": "GENERAL",
+													"disabled": true
+												},
+												{
+													"key": "format",
+													"value": "PAPERBACK",
+													"disabled": true
+												},
+												{
+													"key": "publishDateFrom",
+													"value": "2000-01-01",
+													"disabled": true
+												},
+												{
+													"key": "publishDateTo",
+													"value": "2023-12-31",
+													"disabled": true
+												},
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "size",
+													"value": "20"
+												},
+												{
+													"key": "sort",
+													"value": "name,asc"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Book",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwMzExOTksImV4cCI6MTc0NzAzOTgzOSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.NMBH4eK5VKcwYNH7dYQ1VVcs6LilJ7fmO8efEPcNi5p6VkEUIu5UDsMYdZuiOhT-jjdoJZJ1RSKM3y-2GdJJ7A"
+											}
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Yeni bir kitap\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/books/89000404-c45e-4961-9f41-91dc7cf70ce8"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Book Copy",
+							"item": [
+								{
+									"name": "Save Book Copies",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwNjgzNjUsImV4cCI6MTc0NzA3NzAwNSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.LvIlOtO_fuzuzcnXQVbHt_XBP0VmWNFILrpehF-valzyW_GGpzvpnmGOrCAFJ0cRMR1j0dCBKePmeJzJvXqM_w"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"bookId\": \"89000404-c45e-4961-9f41-91dc7cf70ce8\",\r\n    \"bookCopies\": [\r\n        {\r\n            \"acquisitionType\": \"PURCHASED\",\r\n            \"condition\": \"NEW\"\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/book-copies"
+									},
+									"response": []
+								},
+								{
+									"name": "Check Book Copy Availability by Barcode",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDgzMTg1LCJleHAiOjE3NDcwOTE4MjUsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.6xTgKnRD7vp2KKwd5lQtR7Gszw5sNQ1xR91tk7nEQDlnCEGP8ra5c1BOU7DXattz5tlpuDNW52BXOF4TyB2aDw"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/book-copies/barcode/BC-AE2ADB09/available"
+									},
+									"response": []
+								},
+								{
+									"name": "Update Book Copy Status",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwODE0ODcsImV4cCI6MTc0NzA5MDEyNywiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.wonvMw8Y3pOyqzIvCe5giQdjsHHkpG_tVoGzCvfC1yKrBUQSQmQkLW8Q2SfaRXutUgRCqtCWmIwVo-7MTy3eTw"
+											}
+										},
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"status\": \"AVAILABLE\"   \r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/book-copies/9e666ccd-c1d9-495c-88cf-6f7a6cd0011d/status"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Loan",
+							"item": [
+								{
+									"name": "Save Loan",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDg0ODA5LCJleHAiOjE3NDcwOTM0NDksImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.ZY0stdkQxYQCc4Mqkdj7pUMueRMjPwJNUD-2yQWsHzwPiSc2X5Hui6nRPkeeTWCZs-jrMpCboR0zgXDg6v7jag"
+											}
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"bookCopyBarcode\": \"BC-AE2ADB09\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/loans"
+									},
+									"response": []
+								},
+								{
+									"name": "Return Book Copy",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDg0ODA5LCJleHAiOjE3NDcwOTM0NDksImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.ZY0stdkQxYQCc4Mqkdj7pUMueRMjPwJNUD-2yQWsHzwPiSc2X5Hui6nRPkeeTWCZs-jrMpCboR0zgXDg6v7jag"
+											}
+										},
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"bookCopyBarcode\": \"BC-AE2ADB09\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "http://localhost:8080/api/v1/loans/return/BC-AE2ADB09"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Loans",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwNzU3OTEsImV4cCI6MTc0NzA4NDQzMSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.DJLKT72PN0EIDmMTKnm664qzKBsdl38eXs1r0iVC74ja5gqo65VxeckOvuOf2Xe0TFobOxtlywWn9cjweZEwUg"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"bookCopyBarcode\": \"BC-AE2ADB09\"\r\n}"
+										},
+										"url": "http://localhost:8080/api/v1/loans"
+									},
+									"response": []
+								},
+								{
+									"name": "Find Current Patron's All Loans",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBpY2xvdWQuY29tIiwiaWF0IjoxNzQ3MDc2MzQxLCJleHAiOjE3NDcwODQ5ODEsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFUUk9OIl19.BXnmA36d-ZP_xDT481Y_wpywFEnPtwdRpPk8ULRUCR2nK_CyU0JivRuFB9Q6P5jDBV_sGDyWnizekPRMmnX6Sg"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/loans/my"
+									},
+									"response": []
+								},
+								{
+									"name": "Find All Loan Penalties",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": {
+												"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1bXV0eWVuaWRpbEBsaWJyYXJ5bWFuYWdlbWVudC5jb20iLCJpYXQiOjE3NDcwNzcxNzAsImV4cCI6MTc0NzA4NTgxMCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9MSUJSQVJJQU4iXX0.VZ-saje682iioKuHyybxamCwqd7eSZzwoUQO-CSVPDPHJmg-eIC_NQPW5i2KO69PD3CP0WhAKD_QaP_0MemH1g"
+											}
+										},
+										"method": "GET",
+										"header": [],
+										"url": "http://localhost:8080/api/v1/loans/penalties"
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
