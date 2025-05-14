@@ -128,6 +128,7 @@ Available in the repository as `postman_collection.json`. Main endpoints:
       Run `GatewayServiceApplication.java`
 
 4. **Access the system**:
+    - Swagger UI: http://localhost:8080/swagger-ui.html
     - API Gateway: http://localhost:8080
     - Eureka Dashboard: http://localhost:8761
     - Zipkin UI (if enabled): http://localhost:9411
