@@ -43,7 +43,8 @@ public class SecurityConfig {
                                         "/swagger-ui.html",
                                         "/docs/**",
                                         "/book-service/v3/api-docs",
-                                        "/book-service/v3/api-docs/**"
+                                        "/book-service/v3/api-docs/**",
+                                        "/actuator/health"
                                 ).permitAll()
                                 .anyRequest()
                                 .authenticated()
