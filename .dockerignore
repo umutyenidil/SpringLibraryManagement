@@ -1,0 +1,78 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.classpath
+.project
+.settings/
+
+# Build output
+build/
+bin/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Local configuration files
+*.properties
+*.yml
+!bootstrap.yml
+!application*.yml
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Environment files
+.env
+*.env
+
+# Test files
+*.test
+*.test.*
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Documentation
+README.md
+*.md
+docs/
+
+# Executables
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Archives
+*.zip
+*.tar
+*.gz
+*.jar
+*.war
+*.ear
+*.rar
+
+# Database
+*.db
+*.sql
+*.sqlite
