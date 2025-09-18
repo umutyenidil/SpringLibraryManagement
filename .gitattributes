@@ -1,0 +1,47 @@
+# Handle line endings for different file types
+* text=auto eol=lf
+
+# Ensure proper line endings for Windows-specific files
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+
+# Ensure shell scripts have LF line endings
+*.sh text eol=lf
+
+# Ensure Maven wrapper files have LF line endings
+mvnw text eol=lf
+
+# Binary files should not be modified
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.jar binary
+*.war binary
+*.ear binary
+*.zip binary
+*.tar.gz binary
+
+# Source code files
+*.java text diff=java
+*.xml text
+*.properties text
+*.json text
+*.yml text
+*.yaml text
+*.md text
+*.txt text
+
+# Documentation
+*.adoc text
+*.asciidoc text
+
+# Ignore all .gitattributes in subdirectories
+**/.gitattributes export-ignore
+
+# Except the root .gitattributes file
+!.gitattributes

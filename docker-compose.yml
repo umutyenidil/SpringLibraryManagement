@@ -1,29 +1,273 @@
+version: '3.8'
+
 services:
   postgres:
     container_name: lm_postgres
-    image: postgres
+    image: postgres:15-alpine
     environment:
-      POSTGRES_USER: umut
-      POSTGRES_PASSWORD: umut
-      PGDATA: /var/lib/postgresql/data
+      POSTGRES_USER: ${DB_USER:-umut}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-umut}
+      POSTGRES_DB: ${DB_NAME:-library_management}
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - lm_postgres_data:/var/lib/postgresql/data
-      - ./docker:/docker-entrypoint-initdb.d/
+      - ./docker/init-db:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-umut}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - lm_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
 
   zipkin:
     container_name: lm_zipkin
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:3.5
     ports:
       - "9411:9411"
+    environment:
+      - STORAGE_TYPE=mem
+      - RABBIT_ADDRESSES=amqp://guest:guest@rabbitmq:5672
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9411/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     networks:
       - lm_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  config-server:
+    container_name: lm_config_server
+    build:
+      context: ./services/config-server
+      dockerfile: ../../Dockerfile
+      args:
+        - SERVICE_DIR=.
+      cache_from:
+        - ${DOCKER_REGISTRY:-library}/config-server:latest
+    environment:
+      - SPRING_APPLICATION_NAME=config-server
+      - SERVER_PORT=8081
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8081:8081"
+    networks:
+      - lm_network
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/actuator/health"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 768M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+  discovery-server:
+    container_name: lm_discovery_server
+    build:
+      context: ./services/discovery
+      dockerfile: ../../Dockerfile
+      args:
+        - SERVICE_DIR=.
+      cache_from:
+        - ${DOCKER_REGISTRY:-library}/discovery-server:latest
+    environment:
+      - SPRING_APPLICATION_NAME=discovery-server
+      - SERVER_PORT=8761
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8081
+      - EUREKA_INSTANCE_PREFER_IP_ADDRESS=true
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=true
+      - EUREKA_CLIENT_FETCH_REGISTRY=true
+    ports:
+      - "8761:8761"
+    networks:
+      - lm_network
+    depends_on:
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: 768M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+  user-service:
+    container_name: lm_user_service
+    build:
+      context: ./services/user
+      dockerfile: ../../Dockerfile
+      args:
+        - SERVICE_DIR=.
+      cache_from:
+        - ${DOCKER_REGISTRY:-library}/user-service:latest
+    environment:
+      - SPRING_APPLICATION_NAME=user-service
+      - SERVER_PORT=8084
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8081
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${DB_NAME:-library_management}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-umut}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD:-umut}
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+    ports:
+      - "8084:8084"
+    networks:
+      - lm_network
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8084/actuator/health"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  book-service:
+    container_name: lm_book_service
+    build:
+      context: ./services/book
+      dockerfile: ../../Dockerfile
+      args:
+        - SERVICE_DIR=.
+      cache_from:
+        - ${DOCKER_REGISTRY:-library}/book-service:latest
+    environment:
+      - SPRING_APPLICATION_NAME=book-service
+      - SERVER_PORT=8083
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8081
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${DB_NAME:-library_management}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER:-umut}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD:-umut}
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+    ports:
+      - "8083:8083"
+    networks:
+      - lm_network
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8083/actuator/health"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  cloud-gateway:
+    container_name: lm_gateway
+    build:
+      context: ./services/gateway
+      dockerfile: ../../Dockerfile
+      args:
+        - SERVICE_DIR=.
+      cache_from:
+        - ${DOCKER_REGISTRY:-library}/api-gateway:latest
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8081
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_APPLICATION_NAME=api-gateway
+      - SERVER_PORT=8080
+    ports:
+      - "8080:8080"
+    networks:
+      - lm_network
+    depends_on:
+      discovery-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 5s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
 
 networks:
   lm_network:
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: lm_network
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
 
 volumes:
   lm_postgres_data:
+    driver: local
+  maven_repository_cache:
+    driver: local
+
+# Environment variables can be overridden in a .env file
+# Example .env file:
+# DB_USER=your_db_user
+# DB_PASSWORD=your_secure_password
+# DB_NAME=your_database_name
+# DOCKER_REGISTRY=your-registry/namespace
